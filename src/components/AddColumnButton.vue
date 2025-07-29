@@ -4,7 +4,7 @@
     @click="$emit('add')"
     title="Ajouter une colonne"
   >
-    +
+    <Plus class="icon" />
   </button>
 </template>
 

@@ -3,18 +3,20 @@
     <div class="controls">
       <div class="controls-right">
         <button @click="toggleLock" class="control-btn" :title="color.locked ? 'Déverrouiller' : 'Verrouiller'">
-          {{ color.locked ? '🔒' : '🔓' }}
+          <Lock v-if="color.locked" class="icon" />
+          <Unlock v-else class="icon" />
         </button>
         <button @click="copyToClipboard" class="control-btn" title="Copier le code">
-          {{ copied ? '✓' : '📋' }}
+          <Check v-if="copied" class="icon" />
+          <Clipboard v-else class="icon" />
         </button>
         <button v-if="showRemove" @click="$emit('remove')" class="control-btn" title="Supprimer la colonne">
-          ✕
+          <X class="icon" />
         </button>
       </div>
     </div>
     <div class="content">
-      <div class="hex-code" @click="copyToClipboard">{{ color.hex.toUpperCase() }}</div>
+      <div class="hex-code" @click="copyToClipboard">{{ color.hex.substring(1).toUpperCase() }}</div>
     </div>
   </div>
 </template>
@@ -22,9 +24,17 @@
 <script lang="ts">
 import { ref } from 'vue'
 import type { Color } from '../types/types'
+import { Lock, Unlock, Clipboard, Check, X } from 'lucide-vue-next'
 
 export default {
   name: 'ColorBox',
+  components: {
+    Lock,
+    Unlock,
+    Clipboard,
+    Check,
+    X
+  },
 
   props: {
     color: {
@@ -147,6 +157,13 @@ export default {
 
 .remove {
   color: rgba(255, 255, 255, 0.8);
+}
+
+
+.icon {
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: middle;
 }
 </style>
 
