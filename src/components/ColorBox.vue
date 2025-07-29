@@ -100,6 +100,67 @@ export default {
   position: relative;
   transition: all 0.3s ease;
   font-family: 'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  min-width: 0;
+}
+@media (max-width: 768px) {
+  .color-box {
+    width: 100vw;
+    min-width: 100vw;
+    max-width: 100vw;
+    height: calc(100vh / var(--color-count, 5));
+    min-height: 56px;
+    max-height: none;
+    flex: 1 1 0%;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    gap: 0;
+    position: relative;
+  }
+  .controls {
+    padding: 10px 0 0 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  .hex-code {
+    font-size: 1.3em;
+    padding: 0;
+    color: #222;
+    text-shadow: none;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-align: left;
+    margin-left: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .color-box {
+    height: calc(100vh / var(--color-count, 5));
+    min-height: 48px;
+  }
+  .hex-code {
+    font-size: 1.1em;
+    margin-left: 12px;
+  }
+}
+/* Supprimer tout scroll horizontal et palette-row en mobile */
+@media (max-width: 768px) {
+  .palette-row {
+    display: block !important;
+    flex-direction: column !important;
+    overflow-x: unset !important;
+    width: 100vw !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    scroll-snap-type: none !important;
+  }
 }
 
 .color-box:hover {

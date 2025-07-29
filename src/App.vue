@@ -1,8 +1,9 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useColorStore } from '@/stores/colorStore'
-import { ChevronLeft, ChevronRight, Heart, Sun, Moon } from 'lucide-vue-next'
+import { ChevronLeft, ChevronRight, Heart, Sun, Moon, AlignJustify, X } from 'lucide-vue-next'
 import { supabase } from './supabase'
+import jsPDF from 'jspdf'
 import { Toaster, toast } from 'vue-sonner'
 import 'vue-sonner/style.css'
 
@@ -14,22 +15,42 @@ export default defineComponent({
     Heart,
     Sun,
     Moon,
+    AlignJustify,
+    X,
     Toaster
   },
   data() {
     return {
       store: useColorStore(),
-      isDarkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
+      isDarkMode: false,
       user: null as any,
       showPalettesModal: false,
       palettes: [],
-      loadingPalettes: false
+      loadingPalettes: false,
+      mobileMenuOpen: false,
+    toggleMobileMenu() {
+      this.mobileMenuOpen = !this.mobileMenuOpen
+    },
+    closeMobileMenu() {
+      this.mobileMenuOpen = false
+    },
     }
   },
   async created() {
+    // Restaure le thème depuis localStorage ou la préférence système
+    const savedTheme = localStorage.getItem('theme')
+    if (savedTheme === 'dark') {
+      this.isDarkMode = true
+    } else if (savedTheme === 'light') {
+      this.isDarkMode = false
+    } else {
+      this.isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    }
     // Écouter les changements de préférence système
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      this.isDarkMode = e.matches
+      if (!localStorage.getItem('theme')) {
+        this.isDarkMode = e.matches
+      }
     })
     // Vérifier si l'utilisateur est déjà connecté
     const { data: { user } } = await supabase.auth.getUser()
@@ -53,6 +74,10 @@ export default defineComponent({
     },
     handleRedo() {
       this.store.redo()
+    },
+    toggleTheme() {
+      this.isDarkMode = !this.isDarkMode
+      localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light')
     },
     async loginFigma() {
       await supabase.auth.signInWithOAuth({ provider: 'figma' })
@@ -153,21 +178,47 @@ export default defineComponent({
       this.store.setColors(palette.colors)
       this.showPalettesModal = false
     },
+    async deletePalette(palette) {
+      if (!palette.id) return
+      const confirmDelete = confirm('Supprimer cette palette ?')
+      if (!confirmDelete) return
+      let error = null
+      try {
+        const res = await supabase.from('palettes').delete().eq('id', palette.id)
+        error = res.error
+      } catch (e) {
+        toast.error('Erreur réseau', { description: 'Impossible de supprimer la palette.' })
+        return
+      }
+      if (error) {
+        toast.error('Erreur lors de la suppression', { description: error.message })
+      } else {
+        toast.success('Palette supprimée', { description: 'La palette a bien été supprimée.' })
+        this.palettes = this.palettes.filter(p => p.id !== palette.id)
+      }
+    },
     printPalette(palette) {
-      // Génération PDF simple (window.print sur une nouvelle fenêtre)
-      const win = window.open('', '', 'width=800,height=600')
-      win.document.write('<html><head><title>Palette PDF</title></head><body style="font-family:sans-serif;">')
-      win.document.write('<h2>Palette : ' + (palette.name || '') + '</h2>')
-      win.document.write('<div style="display:flex;gap:8px;margin-bottom:16px;">')
-      palette.colors.forEach(color => {
-        win.document.write('<div style="width:80px;height:80px;background:' + color + ';display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;">' + color + '</div>')
+      // Génération PDF avec jsPDF
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(18)
+      doc.text(palette.name || 'Palette', 15, 20)
+      doc.setFontSize(12)
+      doc.text('Date : ' + new Date(palette.created_at).toLocaleString(), 15, 30)
+      // Affichage des couleurs sous forme de rectangles
+      const startY = 40
+      const rectH = 22
+      const rectW = 170
+      palette.colors.forEach((color, i) => {
+        const y = startY + i * (rectH + 6)
+        doc.setFillColor(color)
+        doc.rect(15, y, rectW, rectH, 'F')
+        doc.setTextColor('#222')
+        doc.setFontSize(14)
+        doc.text(color.toUpperCase(), 20, y + rectH/2 + 5)
       })
-      win.document.write('</div>')
-      win.document.write('<div>Date : ' + new Date(palette.created_at).toLocaleString() + '</div>')
-      win.document.write('</body></html>')
-      win.document.close()
-      win.print()
-    }
+      doc.save((palette.name || 'palette') + '.pdf')
+    },
   }
 })
 </script>
@@ -175,6 +226,7 @@ export default defineComponent({
 <template>
   <div class="app" :class="{ dark: isDarkMode }">
     <Toaster position="bottom-center" expand :theme="isDarkMode ? 'dark' : 'light'" />
+
     <nav class="navbar">
       <div class="nav-left">
         <img src="@/assets/logo.svg" alt="Coolors" class="logo" />
@@ -182,14 +234,15 @@ export default defineComponent({
         <span class="nav-text">Appuyez sur la barre d'espace pour générer une palette</span>
       </div>
 
-      <div class="nav-right">
+      <!-- Menu desktop -->
+      <div class="nav-right nav-desktop">
         <button class="nav-button" title="Retour" :disabled="!canUndo" @click="handleUndo">
           <ChevronLeft class="icon" />
         </button>
         <button class="nav-button" title="Suivant" :disabled="!canRedo" @click="handleRedo">
           <ChevronRight class="icon" />
         </button>
-        <button class="nav-button" title="Mode Sombre" @click="isDarkMode = !isDarkMode">
+        <button class="nav-button" title="Mode Sombre" @click="toggleTheme">
           <Moon v-if="isDarkMode" class="icon" />
           <Sun v-else class="icon" />
         </button>
@@ -210,7 +263,30 @@ export default defineComponent({
           📁 Mes palettes
         </button>
       </div>
+
+      <!-- Hamburger mobile -->
+      <button class="nav-button nav-hamburger" @click="toggleMobileMenu" aria-label="Menu" title="Menu">
+        <AlignJustify class="icon" />
+      </button>
+      <transition name="fade">
+        <div v-if="mobileMenuOpen" class="mobile-menu-overlay" @click.self="closeMobileMenu">
+          <div class="mobile-menu">
+            <button class="close-btn" @click="closeMobileMenu"><X class="icon" /></button>
+            <button class="nav-button" :disabled="!canUndo" @click="handleUndo"><ChevronLeft class="icon" /> Précédent</button>
+            <button class="nav-button" :disabled="!canRedo" @click="handleRedo"><ChevronRight class="icon" /> Suivant</button>
+            <button class="nav-button" @click="toggleTheme"><Moon v-if="isDarkMode" class="icon" /><Sun v-else class="icon" /> Thème</button>
+            <button v-if="!user" class="nav-button" @click="loginFigma"><img src="https://static.figma.com/app/icon/1/favicon.png" alt="Figma" style="width:1.2em;height:1.2em;vertical-align:middle;margin-right:4px;" />Connexion Figma</button>
+            <span v-else style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:0.95em;opacity:0.8;">{{ user.email }}</span>
+              <button class="nav-button" @click="logout">Déconnexion</button>
+            </span>
+            <button class="nav-button primary" @click="savePalette"><Heart class="icon" /> Sauvegarder</button>
+            <button v-if="user" class="nav-button" @click="fetchPalettes">📁 Mes palettes</button>
+          </div>
+        </div>
+      </transition>
     </nav>
+
 
     <router-view />
 
@@ -228,6 +304,7 @@ export default defineComponent({
               <span style="font-size:0.95em;opacity:0.7;">{{ palette.name }}</span>
               <button class="nav-button" @click="loadPalette(palette)">Afficher</button>
               <button class="nav-button" @click="printPalette(palette)">Imprimer PDF</button>
+              <button class="nav-button" @click="deletePalette(palette)" style="color:#e74c3c;">Supprimer</button>
             </div>
             <div style="font-size:0.8em;opacity:0.6;">{{ new Date(palette.created_at).toLocaleString() }}</div>
           </li>
@@ -451,5 +528,93 @@ nav a:first-of-type {
 .dark .modal-content {
   background: #232323;
   color: #fff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Hamburger menu styles */
+.nav-hamburger {
+  display: none;
+}
+.nav-desktop {
+  display: flex;
+}
+@media (max-width: 900px) {
+  .nav-text {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  .nav-desktop {
+    display: none !important;
+  }
+  .nav-hamburger {
+    display: flex !important;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    z-index: 1100;
+  }
+}
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  z-index: 2000;
+}
+.mobile-menu {
+  background: var(--bg-color);
+  color: var(--text-color);
+  width: 80vw;
+  max-width: 320px;
+  min-height: 100vh;
+  box-shadow: -2px 0 16px rgba(0,0,0,0.12);
+  padding: 32px 18px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  animation: slideIn 0.2s;
+}
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: inherit;
+  cursor: pointer;
+}
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>

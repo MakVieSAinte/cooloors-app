@@ -6,8 +6,8 @@ export const useColorStore = defineStore('color', {
     colors: [] as Color[],
     history: [] as ColorHistory[],
     currentIndex: -1,
-    minColors: 4, // Minimum de 4 couleurs
-    maxColors: 7, // Maximum de 7 couleurs
+    minColors: 3, // Minimum de 4 couleurs
+    maxColors: 6, // Maximum de 7 couleurs
   }),
 
   actions: {
@@ -18,7 +18,7 @@ export const useColorStore = defineStore('color', {
     createColor(): Color {
       return {
         id: crypto.randomUUID(),
-        hex: this.generateRandomColor(),
+        hex: this.generateRandomColor(),  
         locked: false,
       }
     },
