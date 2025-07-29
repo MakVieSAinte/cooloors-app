@@ -15,9 +15,11 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.53.0",
+    "lucide-vue-next": "^0.533.0",
     "pinia": "^3.0.3",
     "vue": "^3.5.17",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "vue-sonner": "^2.0.2"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.2",

@@ -10,7 +10,7 @@
           <Check v-if="copied" class="icon" />
           <Clipboard v-else class="icon" />
         </button>
-        <button v-if="showRemove" @click="$emit('remove')" class="control-btn" title="Supprimer la colonne">
+        <button v-if="showRemove" @click="removeColumn" class="control-btn" title="Supprimer la colonne">
           <X class="icon" />
         </button>
       </div>
@@ -21,10 +21,12 @@
   </div>
 </template>
 
+
 <script lang="ts">
 import { ref } from 'vue'
 import type { Color } from '../types/types'
 import { Lock, Unlock, Clipboard, Check, X } from 'lucide-vue-next'
+import { toast } from 'vue-sonner'
 
 export default {
   name: 'ColorBox',
@@ -59,18 +61,37 @@ export default {
     async copyToClipboard() {
       await navigator.clipboard.writeText(this.color.hex)
       this.copied = true
+      toast.success('Couleur copiée', {
+        description: this.color.hex,
+      })
       setTimeout(() => {
         this.copied = false
       }, 2000)
     },
     toggleLock() {
       this.$emit('toggle-lock', this.color.id)
+      if (this.color.locked) {
+        toast.warning('Déverrouillée', {
+          description: `La couleur ${this.color.hex} est maintenant modifiable.`
+        })
+      } else {
+        toast.success('Verrouillée', {
+          description: `La couleur ${this.color.hex} est maintenant verrouillée.`
+        })
+      }
+    },
+    removeColumn() {
+      this.$emit('remove')
+      toast.error('Colonne supprimée', {
+        description: `La couleur ${this.color.hex} a été retirée.`
+      })
     }
   }
 }
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap');
 .color-box {
   height: calc(100vh - 56px);
   flex: 1;
@@ -78,6 +99,7 @@ export default {
   flex-direction: column;
   position: relative;
   transition: all 0.3s ease;
+  font-family: 'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .color-box:hover {
@@ -149,6 +171,7 @@ export default {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   text-align: center;
+  font-family: 'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .hex-code:hover {

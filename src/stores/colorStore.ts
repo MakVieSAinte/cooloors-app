@@ -80,5 +80,14 @@ export const useColorStore = defineStore('color', {
       this.addToHistory(newColors)
       this.colors = newColors
     },
+    setColors(hexArray: string[]) {
+      // Remplace la palette actuelle par un tableau de couleurs hexadécimales (sans lock)
+      this.colors = hexArray.map(hex => ({
+        id: crypto.randomUUID(),
+        hex,
+        locked: false
+      }))
+      this.addToHistory(this.colors)
+    },
   },
 })
