@@ -1,24 +1,26 @@
 <template>
-  <div class="color-box" :style="{ backgroundColor: color.hex }">
-    <div class="controls">
-      <div class="controls-right">
-        <button @click="toggleLock" class="control-btn" :title="color.locked ? 'Déverrouiller' : 'Verrouiller'">
-          <Lock v-if="color.locked" class="icon" />
-          <Unlock v-else class="icon" />
-        </button>
-        <button @click="copyToClipboard" class="control-btn" title="Copier le code">
-          <Check v-if="copied" class="icon" />
-          <Clipboard v-else class="icon" />
-        </button>
-        <button v-if="showRemove" @click="removeColumn" class="control-btn" title="Supprimer la colonne">
-          <X class="icon" />
-        </button>
+  <!-- <div> -->
+    <div class="color-box" :style="{ backgroundColor: color.hex }">
+      <div class="controls">
+        <div class="controls-right">
+          <button @click="toggleLock" class="control-btn" :title="color.locked ? 'Déverrouiller' : 'Verrouiller'">
+            <Lock v-if="color.locked" class="icon" />
+            <Unlock v-else class="icon" />
+          </button>
+          <button @click="copyToClipboard" class="control-btn" title="Copier le code">
+            <Check v-if="copied" class="icon" />
+            <Clipboard v-else class="icon" />
+          </button>
+          <button v-if="showRemove" @click="removeColumn" class="control-btn" title="Supprimer la colonne">
+            <X class="icon" />
+          </button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="hex-code" @click="copyToClipboard">{{ color.hex.substring(1).toUpperCase() }}</div>
       </div>
     </div>
-    <div class="content">
-      <div class="hex-code" @click="copyToClipboard">{{ color.hex.substring(1).toUpperCase() }}</div>
-    </div>
-  </div>
+  <!-- </div> -->
 </template>
 
 

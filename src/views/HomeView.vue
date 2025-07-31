@@ -18,19 +18,6 @@
           class="add-btn"
         />
       </div>
-    </div><div class="controls">
-      <button @click="undo" :disabled="currentIndex <= 0">
-        ↩️ Undo
-      </button>
-      <button @click="generatePalette" class="generate">
-        🎲 Generate
-      </button>
-      <button
-        @click="redo"
-        :disabled="currentIndex >= history.length - 1"
-      >
-        ↪️ Redo
-      </button>
     </div>
   </main>
 </template>
@@ -110,7 +97,18 @@ export default {
   margin: 0;
 }
 
+@media (max-width: 768px) {
+  .colors-container {
+    display: flex;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0px;
+  }
+}
+
 .color-column {
+  height: 100% !important;
   flex: 1;
   position: relative;
   display: flex;
