@@ -4,9 +4,9 @@
 
     <nav class="navbar">
       <div class="nav-left">
-        <img src="@/assets/logo.svg" alt="Coolors" class="logo" />
+        <img src="@/assets/logo.png" alt="Coolors" class="logo" />
         <div class="spacer"></div>
-        <span class="nav-text">Appuyez sur la barre d'espace pour générer une palette</span>
+        <span class="nav-text">Appuyez sur la barre d'espace pour générer une palette.</span>
       </div>
 
       <!-- Menu desktop -->
@@ -24,17 +24,32 @@
 
         </button>
         <button class="nav-button" title="Mode Sombre" @click="toggleTheme">
-          <Moon v-if="isDarkMode" class="icon" />
-          <Sun v-else class="icon" />
+
+          <svg v-if="isDarkMode" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg2">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+</svg>
+
+          <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg2">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+</svg>
+
         </button>
         <div class="spacer"></div>
         <button class="nav-button primary" @click="savePalette">
-          <Heart class="icon" />
+          <!-- <Heart class="icon" /> -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+</svg>
+
           Sauvegarder
         </button>
         <button v-if="user" class="nav-button" @click="fetchPalettes" title="Mes palettes">
-          📁 Mes palettes
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg2">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 0 0 5.304 0l6.401-6.402M6.75 21A3.75 3.75 0 0 1 3 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 0 0 3.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008Z" />
+</svg>
+ Mes palettes
         </button>
+
         <button v-if="!user" class="nav-button" @click="loginFigma" title="Connexion Figma">
           <img
             src="https://static.figma.com/app/icon/1/favicon.png"
@@ -43,9 +58,12 @@
           />
           Connexion Figma
         </button>
-        <span v-else style="display: flex; align-items: center; gap: 8px">
+        <!-- <span v-else style="display: flex; align-items: center; gap: 8px">
           <span style="font-size: 0.95em; opacity: 0.8">{{ user.email }}</span>
           <button class="nav-button" @click="logout" title="Déconnexion">Déconnexion</button>
+        </span> -->
+        <span v-else @click="showModalProfil = true" class="profil">
+          <span class="initials">{{ user.email.charAt(0).toUpperCase() }}</span>
         </span>
       </div>
 
@@ -99,6 +117,8 @@
     <div v-if="showPalettesModal" class="modal-overlay" @click.self="showPalettesModal = false">
       <div class="modal-content">
         <h2>Mes palettes sauvegardées</h2>
+        <br/>
+        <br/>
         <div v-if="loadingPalettes">Chargement...</div>
         <div v-else-if="palettes.length === 0">Aucune palette sauvegardée.</div>
         <ul v-else style="list-style: none; padding: 0; max-height: 50vh; overflow: auto">
@@ -118,10 +138,23 @@
                 ></div>
               </div>
               <span style="font-size: 0.95em; opacity: 0.7">{{ palette.name }}</span>
-              <button class="nav-button" @click="loadPalette(palette)">Afficher</button>
-              <button class="nav-button" @click="printPalette(palette)">Imprimer PDF</button>
+              <button class="nav-button" @click="loadPalette(palette)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+</svg>
+
+
+</button>
+              <button class="nav-button" @click="printPalette(palette)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+</svg>
+</button>
               <button class="nav-button" @click="deletePalette(palette)" style="color: #e74c3c">
-                Supprimer
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
+  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+</svg>
+
               </button>
             </div>
             <div style="font-size: 0.8em; opacity: 0.6">
@@ -129,9 +162,41 @@
             </div>
           </li>
         </ul>
+        <br>
         <button
           class="nav-button primary"
           @click="showPalettesModal = false"
+          style="margin-top: 16px"
+        >
+          Fermer
+        </button>
+      </div>
+    </div>
+
+    <div v-if="user && showModalProfil" class="modal-overlay" @click.self="showModalProfil = false">
+      <div class="modal-content">
+        <h2>Mon Profil</h2>
+        <br>
+        <div class="content-modal-profil">
+          <div class="bloc-logout-profil">
+            <span class="profil modal">
+              <span class="initials">{{ user.email.charAt(0).toUpperCase() }}</span>
+            </span>
+
+            <button class="nav-button logout" @click="logout" title="Déconnexion">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+</svg>
+
+              Déconnexion</button>
+          </div>
+          <p><strong>Email :</strong> {{ user.email }}</p>
+          <p><strong>ID utilisateur :</strong> {{ (user.id).substring(0, 30) }}...</p>
+        </div>
+        <br>
+        <button
+          class="nav-button primary"
+          @click="showModalProfil = false"
           style="margin-top: 16px"
         >
           Fermer
@@ -169,6 +234,7 @@ export default defineComponent({
       isDarkMode: false,
       user: null as any,
       showPalettesModal: false,
+      showModalProfil: false,
       palettes: [],
       loadingPalettes: false,
       mobileMenuOpen: false,
@@ -284,6 +350,11 @@ export default defineComponent({
         });
       }
     },
+
+    async OpenModalProfil() {
+      this.showModalProfil = true;
+    },
+
     async fetchPalettes() {
       if (!this.user) {
         toast.warning("Non connecté", {
@@ -469,7 +540,7 @@ body,
 }
 
 .logo {
-  height: 18px;
+  height: 120px;
 }
 
 .spacer {
@@ -509,6 +580,15 @@ body,
   opacity: 0.9;
 }
 
+.nav-button.logout {
+  background: rgba(255, 0, 0, 0.098);
+  color: var(--text-color);
+}
+
+.nav-button.logout:hover {
+  background: rgba(255, 0, 0, 0.6);
+}
+
 .tools-btn {
   background: #f5f5f5;
 }
@@ -519,6 +599,31 @@ body,
 
 .icon-svg {
   width: 1.2em;
+}
+
+.icon-svg2 {
+  width: 1.4em;
+}
+
+.profil {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--text-color);
+  background: linear-gradient(90deg, #f8ff00 0%, #3ad59f 100%);
+  border: 3px solid #faf8f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+.profil.modal {
+  width: 80px;
+  height: 80px;
+  font-size: 2.2rem;
 }
 
 nav {
@@ -610,6 +715,19 @@ nav a:first-of-type {
   color: #fff;
 }
 
+.content-modal-profil {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 16px;
+}
+
+.bloc-logout-profil {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
 /* Hamburger menu styles */
 .nav-hamburger {
   display: none;
