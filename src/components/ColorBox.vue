@@ -1,33 +1,46 @@
 <template>
-  <!-- <div> -->
     <div class="color-box" :style="{ backgroundColor: color.hex }">
-      <div class="controls">
-        <div class="controls-right">
-          <button @click="toggleLock" class="control-btn" :title="color.locked ? 'Déverrouiller' : 'Verrouiller'">
-            <Lock v-if="color.locked" class="icon" />
-            <Unlock v-else class="icon" />
-          </button>
-          <button @click="copyToClipboard" class="control-btn" title="Copier le code">
-            <Check v-if="copied" class="icon" />
-            <Clipboard v-else class="icon" />
-          </button>
-          <button v-if="showRemove" @click="removeColumn" class="control-btn" title="Supprimer la colonne">
-            <X class="icon" />
-          </button>
+      <div class="content">
+
+        <div class="controls">
+          <div class="tooltip-group">
+            <button @click="toggleLock" class="control-btn lock" :class="color.locked ? 'locked' : ''">
+              <Lock v-if="color.locked" class="icon" :style="{ color: getContrastText(color.hex) }" />
+              <Unlock v-else class="icon" :style="{ color: getContrastText(color.hex) }" />
+              <span class="tooltip">{{ color.locked ? 'Déverrouiller' : 'Verrouiller' }}</span>
+            </button>
+          </div>
+          <div class="tooltip-group">
+            <button @click="copyToClipboard" class="control-btn">
+              <Check v-if="copied" class="icon" :style="{ color: getContrastText(color.hex) }" />
+              <Copy v-else class="icon" :style="{ color: getContrastText(color.hex) }" />
+              <span class="tooltip">Copier</span>
+            </button>
+          </div>
+          <div class="tooltip-group" v-if="showRemove">
+            <button @click="removeColumn" class="control-btn">
+              <X class="icon" :style="{ color: getContrastText(color.hex) }" />
+              <span class="tooltip">Supprimer</span>
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="hex-code"
+          @click="copyToClipboard"
+          :style="{ color: getContrastText(color.hex) }"
+        >
+          {{ color.hex.substring(1).toUpperCase() }}
         </div>
       </div>
-      <div class="content">
-        <div class="hex-code" @click="copyToClipboard">{{ color.hex.substring(1).toUpperCase() }}</div>
-      </div>
     </div>
-  <!-- </div> -->
 </template>
 
 
 <script lang="ts">
 import { ref } from 'vue'
 import type { Color } from '../types/types'
-import { Lock, Unlock, Clipboard, Check, X } from 'lucide-vue-next'
+import { Lock, Unlock, Clipboard, Check, X, Copy } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
 export default {
@@ -37,7 +50,8 @@ export default {
     Unlock,
     Clipboard,
     Check,
-    X
+    X,
+    Copy
   },
 
   props: {
@@ -60,11 +74,24 @@ export default {
   },
 
   methods: {
+    getContrastText(hex) {
+      // Enlève le # si présent
+      hex = hex.replace('#', '');
+      // Convertit en RGB
+      const r = parseInt(hex.substr(0,2),16);
+      const g = parseInt(hex.substr(2,2),16);
+      const b = parseInt(hex.substr(4,2),16);
+      // Calcul de la luminance
+      const luminance = (0.299*r + 0.587*g + 0.114*b)/255;
+      // Retourne noir si fond clair, blanc si fond foncé
+      return luminance > 0.6 ? '#222' : '#fff';
+    },
     async copyToClipboard() {
       await navigator.clipboard.writeText(this.color.hex)
       this.copied = true
       toast.success('Couleur copiée', {
         description: this.color.hex,
+        richColors: true,
       })
       setTimeout(() => {
         this.copied = false
@@ -74,18 +101,21 @@ export default {
       this.$emit('toggle-lock', this.color.id)
       if (this.color.locked) {
         toast.warning('Déverrouillée', {
-          description: `La couleur ${this.color.hex} est maintenant modifiable.`
+          description: `La couleur ${this.color.hex} est maintenant modifiable.`,
+          richColors: true,
         })
       } else {
         toast.success('Verrouillée', {
-          description: `La couleur ${this.color.hex} est maintenant verrouillée.`
+          description: `La couleur ${this.color.hex} est maintenant verrouillée.`,
+          richColors: true,
         })
       }
     },
     removeColumn() {
       this.$emit('remove')
       toast.error('Colonne supprimée', {
-        description: `La couleur ${this.color.hex} a été retirée.`
+        description: `La couleur ${this.color.hex} a été retirée.`,
+        richColors: true,
       })
     }
   }
@@ -94,6 +124,7 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap');
+
 .color-box {
   height: calc(100vh - 56px);
   flex: 1;
@@ -104,6 +135,7 @@ export default {
   font-family: 'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   min-width: 0;
 }
+
 @media (max-width: 768px) {
   .color-box {
     width: 100vw;
@@ -152,6 +184,40 @@ export default {
     margin-left: 12px;
   }
 }
+/* Tooltips façon Coolors */
+
+.tooltip-group {
+  position: relative;
+  display: inline-block;
+}
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  width: max-content;
+  background: #000;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 999999999999999999px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  bottom: 110%;
+  font-size: 0.95em;
+  font-weight: 500;
+  pointer-events: none;
+  transition: opacity 0.18s, visibility 0.18s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+  white-space: nowrap;
+}
+.tooltip-group:hover .tooltip,
+.tooltip-group:focus-within .tooltip {
+  z-index: 9999999999999999999999px;
+  visibility: visible;
+  opacity: 1;
+}
+
 /* Supprimer tout scroll horizontal et palette-row en mobile */
 @media (max-width: 768px) {
   .palette-row {
@@ -169,60 +235,54 @@ export default {
   flex: 1.2;
 }
 
-.controls {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 20px;
-  display: flex;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.color-box:hover .controls {
-  opacity: 1;
-}
-
-.controls-right {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 10px;
-}
-
-.control-btn {
-  background: none;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-  font-size: 1.2em;
-  color: white;
-  opacity: 0.8;
-  transition: all 0.3s ease;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.control-btn:hover {
-  opacity: 1;
-  transform: scale(1.1);
-}
-
-.lock-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2.5em;
-  color: rgba(255, 255, 255, 0.9);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
 .content {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 60px; /* Pour compenser l'espace des boutons en haut */
+  flex-direction: column;
+  gap: 40px;
+  padding-bottom: 100px;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 15px;
+  padding: 0px;
+  display: flex;
+  transition: opacity 0.3s ease;
+}
+
+.control-btn {
+  background: none;
+  border-radius: 5px;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 1.2em;
+  color: white;
+  opacity: 0;
+  transition: all 0.33s ease;
+  will-change: auto;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.color-box:hover .controls .control-btn {
+  opacity: 0.8;
+}
+
+.color-box:hover .controls .control-btn.locked {
+  opacity: 1;
+}
+
+.control-btn:hover {
+  background: #ffffff15;
+  opacity: 1;
+}
+
+.control-btn.locked {
+  opacity: 1;
 }
 
 .hex-code {
@@ -233,24 +293,27 @@ export default {
   cursor: pointer;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
+  padding: 4px 20px;
+  border-radius: 7px;
+  will-change: auto;
   text-align: center;
   font-family: 'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 .hex-code:hover {
-  transform: scale(1.1);
+  background: #ffffff15;
 }
 
 .remove {
   color: rgba(255, 255, 255, 0.8);
 }
 
-
 .icon {
   width: 1.5em;
   height: 1.5em;
   vertical-align: middle;
 }
+
 </style>
 
 

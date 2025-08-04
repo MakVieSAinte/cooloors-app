@@ -8,6 +8,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+    },
+    {
+      path: '/share/:colors',
+      name: 'SharePalette',
+      component: () => import('../views/SharePaletteView.vue'),
     }
   ],
 })
