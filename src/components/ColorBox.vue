@@ -1,7 +1,7 @@
 <template>
     <div class="color-box" :style="{ backgroundColor: color.hex }">
-      <div class="content">
-
+      <!-- Affichage desktop (colonnes verticales) -->
+      <div class="content desktop-layout">
         <div class="controls">
           <div class="tooltip-group">
             <button @click="toggleLock" class="control-btn lock" :class="color.locked ? 'locked' : ''">
@@ -33,6 +33,32 @@
           {{ color.hex.substring(1).toUpperCase() }}
         </div>
         <div class="color-name-label" :style="{ color: getContrastText(color.hex) }">{{ colorName }}</div>
+      </div>
+
+      <!-- Affichage mobile (bandes horizontales) -->
+      <div class="content mobile-layout">
+        <!-- Code hex à gauche -->
+        <div class="mobile-hex" @click="copyToClipboard" :style="{ color: getContrastText(color.hex) }">
+          {{ color.hex.toUpperCase() }}
+        </div>
+
+        <!-- Actions à droite -->
+        <div class="mobile-actions">
+          <button @click="toggleLock" class="mobile-action-btn" :class="color.locked ? 'locked' : ''">
+            <Lock v-if="color.locked" class="icon" />
+            <Unlock v-else class="icon" />
+          </button>
+          <button @click="copyToClipboard" class="mobile-action-btn">
+            <Check v-if="copied" class="icon" />
+            <Copy v-else class="icon" />
+          </button>
+          <button v-if="showRemove" @click="removeColumn" class="mobile-action-btn remove">
+            <X class="icon" />
+          </button>
+          <button v-if="showAdd" @click="addColumn" class="mobile-action-btn add">
+            <Plus class="icon" />
+          </button>
+        </div>
       </div>
     </div>
 </template>
@@ -144,121 +170,30 @@ export default {
   min-width: 0;
 }
 
-@media (max-width: 768px) {
-  .color-box {
-    width: 100vw;
-    min-width: 100vw;
-    max-width: 100vw;
-    height: calc(100vh / var(--color-count, 5));
-    min-height: 56px;
-    max-height: none;
-    flex: 1 1 0%;
-    border-radius: 0 !important;
-    margin: 0 !important;
-    box-shadow: none !important;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    gap: 0;
-    position: relative;
-  }
-  .controls {
-    padding: 10px 0 0 0;
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-  .hex-code {
-    font-size: 1.3em;
-    padding: 0;
-    color: #222;
-    text-shadow: none;
-    font-weight: bold;
-    letter-spacing: 1.5px;
-    text-align: left;
-    margin-left: 18px;
-  }
-}
-
-@media (max-width: 480px) {
-  .color-box {
-    height: calc(100vh / var(--color-count, 5));
-    min-height: 48px;
-  }
-  .hex-code {
-    font-size: 1.1em;
-    margin-left: 12px;
-  }
-}
-/* Tooltips façon Coolors */
-
-.tooltip-group {
-  position: relative;
-  display: inline-block;
-}
-.tooltip {
-  visibility: hidden;
-  opacity: 0;
-  width: max-content;
-  background: #000;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 10px;
-  position: absolute;
-  z-index: 999999999999999999px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-8px);
-  bottom: 110%;
-  font-size: 0.95em;
-  font-weight: 500;
-  pointer-events: none;
-  transition: opacity 0.18s, visibility 0.18s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.13);
-  white-space: nowrap;
-}
-.tooltip-group:hover .tooltip,
-.tooltip-group:focus-within .tooltip {
-  z-index: 9999999999999999999999px;
-  visibility: visible;
-  opacity: 1;
-}
-
-/* Supprimer tout scroll horizontal et palette-row en mobile */
-@media (max-width: 768px) {
-  .palette-row {
-    display: block !important;
-    flex-direction: column !important;
-    overflow-x: unset !important;
-    width: 100vw !important;
-    padding: 0 !important;
-    gap: 0 !important;
-    scroll-snap-type: none !important;
-  }
-}
-
 .color-box:hover {
   flex: 1.2;
 }
 
-.content {
-  flex: 1;
+/* Layout desktop par défaut */
+.desktop-layout {
   display: flex;
-  justify-content: center;
+  flex: 1;
+  justify-content: end;
   align-items: center;
   flex-direction: column;
   gap: 10px;
-  padding-bottom: 100px;
+  padding-bottom: 90px;
+}
+
+.mobile-layout {
+  display: none;
 }
 
 .controls {
   display: flex;
   flex-direction: column-reverse;
-  gap: 15px;
+  gap: 2px;
   padding: 0px;
-  display: flex;
   transition: opacity 0.3s ease;
 }
 
@@ -313,16 +248,6 @@ export default {
   background: #ffffff15;
 }
 
-.remove {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.icon {
-  width: 1.5em;
-  height: 1.5em;
-  vertical-align: middle;
-}
-
 .color-name-label {
   font-size: 0.85em;
   opacity: 0.8;
@@ -331,6 +256,175 @@ export default {
   margin-bottom: 0px;
   letter-spacing: 0.5px;
   font-family: 'Karla', Arial, sans-serif;
+}
+
+.icon {
+  width: 1.2em;
+  height: 1.2em;
+  vertical-align: middle;
+}
+
+/* Tooltips */
+.tooltip-group {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  width: max-content;
+  background: #000;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 999999999999999999px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  bottom: 90%;
+  font-size: 0.70em;
+  font-weight: 500;
+  pointer-events: none;
+  transition: opacity 0.18s, visibility 0.18s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+  white-space: nowrap;
+}
+
+.tooltip-group:hover .tooltip,
+.tooltip-group:focus-within .tooltip {
+  z-index: 9999999999999999999999px;
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Styles mobile - bandes horizontales inspirées de Coolors */
+@media (max-width: 768px) {
+  .color-box {
+    width: 100%;
+    height: auto;
+    min-height: 80px;
+    max-height: none;
+    flex: 1;
+    border-radius: 0;
+    margin: 0;
+    box-shadow: none;
+    display: flex;
+    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .color-box:hover {
+    flex: 1; /* Pas d'agrandissement sur mobile */
+  }
+
+  /* Masquer le layout desktop */
+  .desktop-layout {
+    display: none;
+  }
+
+  /* Afficher le layout mobile */
+  .mobile-layout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 20px;
+    min-height: 80px;
+  }
+
+  /* Actions à gauche */
+  .mobile-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .mobile-action-btn {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0.8;
+  }
+
+  .mobile-action-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+  }
+
+  .mobile-action-btn.locked {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  .mobile-action-btn.remove {
+    background: rgba(255, 0, 0, 0.2);
+  }
+
+  .mobile-action-btn.remove:hover {
+    background: rgba(255, 0, 0, 0.3);
+  }
+
+  .mobile-action-btn .icon {
+    width: 20px;
+    height: 20px;
+    color: inherit;
+  }
+
+  /* Code hex à droite */
+  .mobile-hex {
+    font-size: 1.2em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-family: 'Karla', monospace;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .mobile-hex:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.02);
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-layout {
+    padding: 0 15px;
+    min-height: 70px;
+  }
+
+  .mobile-actions {
+    gap: 12px;
+  }
+
+  .mobile-action-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mobile-action-btn .icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .mobile-hex {
+    font-size: 1.1em;
+    padding: 6px 10px;
+  }
 }
 </style>
 

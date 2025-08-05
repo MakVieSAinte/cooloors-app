@@ -8,6 +8,7 @@ export const useColorStore = defineStore('color', {
     currentIndex: -1,
     minColors: 3, // Minimum de 4 couleurs
     maxColors: 6, // Maximum de 7 couleurs
+    initialColumnCount: 4, // Nombre de colonnes à l'init
   }),
 
   actions: {
@@ -18,22 +19,38 @@ export const useColorStore = defineStore('color', {
     createColor(): Color {
       return {
         id: crypto.randomUUID(),
-        hex: this.generateRandomColor(),  
+        hex: this.generateRandomColor(),
         locked: false,
       }
     },
 
     generatePalette() {
+      // Si aucune couleur, on regarde le localStorage pour le nombre de colonnes
+      let nbCols = 4;
+      if (this.colors.length === 0) {
+        const saved = localStorage.getItem('cooloors_column_count');
+        if (saved) {
+          const n = parseInt(saved, 10);
+          if (!isNaN(n) && n >= this.minColors && n <= this.maxColors + 1) nbCols = n;
+        }
+      } else {
+        nbCols = this.colors.length;
+      }
       const newColors = this.colors.length > 0
         ? this.colors.map(color => ({
             id: color.locked ? color.id : crypto.randomUUID(),
             hex: color.locked ? color.hex : this.generateRandomColor(),
             locked: color.locked
           }))
-        : Array(4).fill(null).map(() => this.createColor()) // 4 couleurs par défaut
+        : Array(nbCols).fill(null).map(() => this.createColor());
 
-      this.addToHistory(newColors)
-      this.colors = newColors
+      this.addToHistory(newColors);
+      this.colors = newColors;
+      // Sauvegarde le nombre de colonnes
+      localStorage.setItem('cooloors_column_count', String(newColors.length));
+
+      // Mettre à jour la variable CSS pour le responsive
+      document.documentElement.style.setProperty('--color-count', String(newColors.length));
     },
 
     addToHistory(colors: Color[]) {
@@ -56,6 +73,8 @@ export const useColorStore = defineStore('color', {
       if (this.currentIndex > 0) {
         this.currentIndex--
         this.colors = JSON.parse(JSON.stringify(this.history[this.currentIndex].colors))
+        // Mettre à jour la variable CSS
+        document.documentElement.style.setProperty('--color-count', String(this.colors.length));
       }
     },
 
@@ -63,6 +82,8 @@ export const useColorStore = defineStore('color', {
       if (this.currentIndex < this.history.length - 1) {
         this.currentIndex++
         this.colors = JSON.parse(JSON.stringify(this.history[this.currentIndex].colors))
+        // Mettre à jour la variable CSS
+        document.documentElement.style.setProperty('--color-count', String(this.colors.length));
       }
     },
 
@@ -72,6 +93,10 @@ export const useColorStore = defineStore('color', {
       newColors.splice(index + 1, 0, this.createColor())
       this.addToHistory(newColors)
       this.colors = newColors
+      // Sauvegarde le nombre de colonnes
+      localStorage.setItem('cooloors_column_count', String(this.colors.length));
+      // Mettre à jour la variable CSS
+      document.documentElement.style.setProperty('--color-count', String(this.colors.length));
     },
 
     removeColorColumn(index: number) {
@@ -79,6 +104,10 @@ export const useColorStore = defineStore('color', {
       const newColors = this.colors.filter((_, i) => i !== index)
       this.addToHistory(newColors)
       this.colors = newColors
+      // Sauvegarde le nombre de colonnes
+      localStorage.setItem('cooloors_column_count', String(this.colors.length));
+      // Mettre à jour la variable CSS
+      document.documentElement.style.setProperty('--color-count', String(this.colors.length));
     },
     setColors(hexArray: string[]) {
       // Remplace la palette actuelle par un tableau de couleurs hexadécimales (sans lock)
@@ -88,6 +117,10 @@ export const useColorStore = defineStore('color', {
         locked: false
       }))
       this.addToHistory(this.colors)
+      // Sauvegarde le nombre de colonnes
+      localStorage.setItem('cooloors_column_count', String(this.colors.length));
+      // Mettre à jour la variable CSS
+      document.documentElement.style.setProperty('--color-count', String(this.colors.length));
     },
   },
 })

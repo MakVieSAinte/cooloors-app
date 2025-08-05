@@ -200,13 +200,12 @@
             <span class="profil modal">
               <span class="initials">{{ user.email.charAt(0).toUpperCase() }}</span>
             </span>
-
             <button class="nav-button logout" @click="logout" title="Déconnexion">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
-</svg>
-
-              Déconnexion</button>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+              </svg>
+              Déconnexion
+            </button>
           </div>
           <p><strong>Email :</strong> {{ user.email }}</p>
           <p><strong>ID utilisateur :</strong> {{ (user.id).substring(0, 30) }}...</p>
@@ -219,6 +218,21 @@
         >
           Fermer
         </button>
+      </div>
+    </div>
+
+    <!-- Modal de bienvenue (affiché une seule fois) -->
+    <div v-if="showWelcomeModal" class="modal-overlay" @click.self="closeWelcomeModal">
+      <div class="modal-content" style="max-width: 400px; text-align: center;">
+        <img src="https://avatars.githubusercontent.com/u/10222538?v=4" alt="Photo de profil" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 18px; box-shadow: 0 2px 12px #0002;" />
+        <h2 style="margin-bottom: 8px;">Makri Vie</h2>
+        <p style="font-size: 1.05em; opacity: 0.85; margin-bottom: 18px;">Développeur passionné par le design, le code et la création d'outils pour les créatifs. Bienvenue sur mon générateur de palettes inspiré de Coolors !</p>
+        <div style="display: flex; justify-content: center; gap: 18px; margin-bottom: 18px;">
+          <a href="https://github.com/MakVieSAinte" target="_blank" title="GitHub" style="color: #222; font-size: 1.7em;"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.483 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.339-2.221-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.987 1.029-2.687-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.7 1.028 1.594 1.028 2.687 0 3.847-2.337 4.695-4.566 4.944.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.749 0 .268.18.579.688.481C19.138 20.2 22 16.448 22 12.021 22 6.484 17.523 2 12 2Z" fill="currentColor"/></svg></a>
+          <a href="https://twitter.com/makvie" target="_blank" title="Twitter" style="color: #1da1f2; font-size: 1.7em;"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.46 5.924c-.793.352-1.645.59-2.54.698a4.48 4.48 0 0 0 1.963-2.475 8.94 8.94 0 0 1-2.828 1.082A4.48 4.48 0 0 0 16.11 4c-2.488 0-4.507 2.02-4.507 4.507 0 .353.04.697.117 1.026C7.728 9.37 4.1 7.6 1.67 4.905c-.387.664-.61 1.437-.61 2.26 0 1.56.795 2.936 2.005 3.744-.738-.023-1.432-.226-2.04-.565v.057c0 2.18 1.55 4.002 3.604 4.418-.377.103-.775.158-1.186.158-.29 0-.57-.028-.844-.08.57 1.78 2.223 3.078 4.183 3.113A8.99 8.99 0 0 1 2 19.54a12.7 12.7 0 0 0 6.88 2.017c8.253 0 12.774-6.837 12.774-12.774 0-.195-.004-.39-.013-.583A9.14 9.14 0 0 0 24 4.59a8.97 8.97 0 0 1-2.54.697z" fill="currentColor"/></svg></a>
+          <a href="https://www.linkedin.com/in/makri-vie/" target="_blank" title="LinkedIn" style="color: #0077b5; font-size: 1.7em;"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.966 0-1.75-.79-1.75-1.75s.784-1.75 1.75-1.75 1.75.79 1.75 1.75-.784 1.75-1.75 1.75zm15.5 10.28h-3v-4.5c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.17-1.73 2.38v4.59h-3v-9h2.89v1.23h.04c.4-.76 1.38-1.56 2.84-1.56 3.04 0 3.6 2 3.6 4.59v4.74z" fill="currentColor"/></svg></a>
+        </div>
+        <button class="nav-button primary" @click="closeWelcomeModal" style="margin-top: 8px;">Continuer</button>
       </div>
     </div>
   </div>
@@ -254,6 +268,7 @@ export default defineComponent({
       showPalettesModal: false,
       showModalProfil: false,
       showDeletePaletteModal: false,
+      showWelcomeModal: false,
       paletteToDelete: null,
       palettes: [],
       loadingPalettes: false,
@@ -264,17 +279,19 @@ export default defineComponent({
       closeMobileMenu() {
         this.mobileMenuOpen = false;
       },
+      closeWelcomeModal() {
+        this.showWelcomeModal = false;
+      },
     };
   },
   async created() {
-    // Restaure le thème depuis localStorage ou la préférence système
+    // Restaure le thème depuis localStorage, sinon light par défaut
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
       this.isDarkMode = true;
-    } else if (savedTheme === "light") {
-      this.isDarkMode = false;
     } else {
-      this.isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      // Par défaut : light
+      this.isDarkMode = false;
     }
     // Écouter les changements de préférence système
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
@@ -282,6 +299,11 @@ export default defineComponent({
         this.isDarkMode = e.matches;
       }
     });
+    // Modal de bienvenue (une seule fois)
+    if (!localStorage.getItem('cooloors_welcome_shown')) {
+      this.showWelcomeModal = true;
+      localStorage.setItem('cooloors_welcome_shown', '1');
+    }
     // Vérifier si l'utilisateur est déjà connecté
     const {
       data: { user },
@@ -353,6 +375,7 @@ export default defineComponent({
       } catch (e) {
         toast.error("Erreur réseau", {
           description: "Impossible de contacter le serveur. Vérifiez votre connexion.",
+          richColors: true,
         });
         return;
       }
@@ -360,15 +383,18 @@ export default defineComponent({
         if (error.code === "42501" || error.code === "permission_denied") {
           toast.error("Accès refusé", {
             description: "Vous n’avez pas les droits pour cette action.",
+            richColors: true,
           });
         } else {
           toast.error("Erreur lors de la sauvegarde", {
             description: error.message,
+            richColors: true,
           });
         }
       } else {
         toast.success("Palette sauvegardée !", {
           description: "Votre palette a bien été enregistrée.",
+          richColors: true,
         });
       }
     },
@@ -400,6 +426,7 @@ export default defineComponent({
         this.loadingPalettes = false;
         toast.error("Erreur réseau", {
           description: "Impossible de charger les palettes. Vérifiez votre connexion.",
+          richColors: true,
         });
         return;
       }
@@ -407,12 +434,14 @@ export default defineComponent({
       if (error) {
         toast.error("Erreur lors du chargement", {
           description: error.message,
+          richColors: true,
         });
         return;
       }
       if (!data || data.length === 0) {
         toast.info("Aucune palette trouvée", {
           description: "Vous n’avez pas encore sauvegardé de palette.",
+          richColors: true,
         });
       }
       this.palettes = data || [];
@@ -441,6 +470,7 @@ export default defineComponent({
       } catch (e) {
         toast.error("Erreur réseau", {
           description: "Impossible de supprimer la palette.",
+          richColors: true,
         });
         this.cancelDeletePalette();
         return;
@@ -448,10 +478,12 @@ export default defineComponent({
       if (error) {
         toast.error("Erreur lors de la suppression", {
           description: error.message,
+          richColors: true,
         });
       } else {
         toast.success("Palette supprimée", {
           description: "La palette a bien été supprimée.",
+          richColors: true,
         });
         this.palettes = this.palettes.filter((p) => p.id !== this.paletteToDelete.id);
       }
@@ -488,7 +520,9 @@ export default defineComponent({
       const colors = encodeURIComponent(palette.colors.join(','));
       const url = `${window.location.origin}/share/${colors}`;
       navigator.clipboard.writeText(url);
-      toast.success("Lien de partage copié !");
+      toast.success("Lien de partage copié !", {
+        richColors: true,
+      });
     },
   },
 });

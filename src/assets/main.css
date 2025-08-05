@@ -18,3 +18,23 @@
   outline: 0;
 }
 
+/* Variable CSS pour le nombre de couleurs */
+:root {
+  --color-count: 5;
+}
+
+/* Optimisations pour mobile */
+@media (max-width: 768px) {
+  #app {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  body {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+  }
+}
+
