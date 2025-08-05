@@ -26,6 +26,7 @@
 import { useColorStore } from '@/stores/colorStore'
 import ColorBox from '@/components/ColorBox.vue'
 import AddColumnButton from '@/components/AddColumnButton.vue'
+import { Toaster, toast } from "vue-sonner";
 
 export default {
   name: 'HomeView',
@@ -61,7 +62,14 @@ export default {
       this.store.toggleLock(id)
     },
     addColorColumn(index: number) {
-      this.store.addColorColumn(index)
+      if (this.colors.length >= 6) {
+        toast.warning("Limite atteinte", {
+          description: "Impossible d'ajouter plus de 7 couleurs à la palette.",
+          richColors: true,
+        });
+        return;
+      }
+      this.store.addColorColumn(index);
     },
     removeColorColumn(index: number) {
       this.store.removeColorColumn(index)

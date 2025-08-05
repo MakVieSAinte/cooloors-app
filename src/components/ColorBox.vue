@@ -32,16 +32,18 @@
         >
           {{ color.hex.substring(1).toUpperCase() }}
         </div>
+        <div class="color-name-label" :style="{ color: getContrastText(color.hex) }">{{ colorName }}</div>
       </div>
     </div>
 </template>
 
 
 <script lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import type { Color } from '../types/types'
 import { Lock, Unlock, Clipboard, Check, X, Copy } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
+import { getColorName } from '../utils/colorName'
 
 export default {
   name: 'ColorBox',
@@ -73,6 +75,12 @@ export default {
     }
   },
 
+  computed: {
+    colorName() {
+      return getColorName(this.color.hex)
+    }
+  },
+
   methods: {
     getContrastText(hex) {
       // Enlève le # si présent
@@ -100,13 +108,13 @@ export default {
     toggleLock() {
       this.$emit('toggle-lock', this.color.id)
       if (this.color.locked) {
-        toast.warning('Déverrouillée', {
-          description: `La couleur ${this.color.hex} est maintenant modifiable.`,
+        toast.success('Colonne verrouillée', {
+          description: `La couleur ${this.color.hex} est maintenant verrouillée.`,
           richColors: true,
         })
       } else {
-        toast.success('Verrouillée', {
-          description: `La couleur ${this.color.hex} est maintenant verrouillée.`,
+        toast.warning('Colonne déverrouillée', {
+          description: `La couleur ${this.color.hex} est maintenant modifiable.`,
           richColors: true,
         })
       }
@@ -241,7 +249,7 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 40px;
+  gap: 10px;
   padding-bottom: 100px;
 }
 
@@ -294,6 +302,7 @@ export default {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   padding: 4px 20px;
+  margin-top: 20px;
   border-radius: 7px;
   will-change: auto;
   text-align: center;
@@ -314,6 +323,15 @@ export default {
   vertical-align: middle;
 }
 
+.color-name-label {
+  font-size: 0.85em;
+  opacity: 0.8;
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  letter-spacing: 0.5px;
+  font-family: 'Karla', Arial, sans-serif;
+}
 </style>
 
 

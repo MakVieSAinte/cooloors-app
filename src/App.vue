@@ -1,6 +1,6 @@
 <template>
   <div class="app" :class="{ dark: isDarkMode }">
-    <Toaster position="bottom-center" expand :theme="isDarkMode ? 'dark' : 'light'" />
+    <Toaster position="bottom-center" :expand="false" :theme="isDarkMode ? 'dark' : 'light'" />
 
     <nav class="navbar">
       <div class="nav-left">
@@ -335,6 +335,7 @@ export default defineComponent({
       if (!this.store.colors || this.store.colors.length === 0) {
         toast.warning("Palette vide", {
           description: "Ajoutez des couleurs avant de sauvegarder.",
+          richColors: true,
         });
         return;
       }
@@ -380,6 +381,7 @@ export default defineComponent({
       if (!this.user) {
         toast.warning("Non connecté", {
           description: "Connectez-vous pour voir vos palettes.",
+          richColors: true,
         });
         return;
       }
@@ -504,6 +506,7 @@ export default defineComponent({
   --button-text: #333333;
   --primary-button: #333333;
   --primary-button-text: #ffffff;
+  --border-nav: #EEE;
   --main-font: "Karla", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
     Arial, sans-serif;
 }
@@ -532,6 +535,7 @@ body,
   --button-text: #ffffff;
   --primary-button: #ffffff;
   --primary-button-text: #1a1a1a;
+  --border-nav: #222;
 }
 
 * {
@@ -563,10 +567,10 @@ body,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 4px var(--navbar-shadow);
+  border-bottom: 2px solid var(--border-nav);
   position: relative;
   z-index: 1000;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, border 0.3s ease;
 }
 
 .nav-left,
