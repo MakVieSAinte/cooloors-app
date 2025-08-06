@@ -1,10 +1,6 @@
 <template>
-  <button
-    class="add-column-btn"
-    @click="$emit('add')"
-    title="Ajouter une colonne"
-  >
-    <X class="icon" style="transform: rotate(45deg); width: 14px;" />
+  <button class="add-column-btn" @click="$emit('add')" title="Ajouter une colonne">
+    <X class="icon" style="transform: rotate(45deg); width: 14px" />
   </button>
 </template>
 
@@ -12,14 +8,12 @@
 import { defineComponent } from "vue";
 import { X } from "lucide-vue-next";
 
-
 export default defineComponent({
   name: "App",
   components: {
-    X
+    X,
   },
 });
-
 </script>
 
 <style scoped>

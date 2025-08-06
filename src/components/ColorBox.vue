@@ -1,163 +1,164 @@
 <template>
-    <div class="color-box" :style="{ backgroundColor: color.hex }">
-      <!-- Affichage desktop (colonnes verticales) -->
-      <div class="content desktop-layout">
-        <div class="controls">
-          <div class="tooltip-group">
-            <button @click="toggleLock" class="control-btn lock" :class="color.locked ? 'locked' : ''">
-              <Lock v-if="color.locked" class="icon" :style="{ color: getContrastText(color.hex) }" />
-              <Unlock v-else class="icon" :style="{ color: getContrastText(color.hex) }" />
-              <span class="tooltip">{{ color.locked ? 'Déverrouiller' : 'Verrouiller' }}</span>
-            </button>
-          </div>
-          <div class="tooltip-group">
-            <button @click="copyToClipboard" class="control-btn">
-              <Check v-if="copied" class="icon" :style="{ color: getContrastText(color.hex) }" />
-              <Copy v-else class="icon" :style="{ color: getContrastText(color.hex) }" />
-              <span class="tooltip">Copier</span>
-            </button>
-          </div>
-          <div class="tooltip-group" v-if="showRemove">
-            <button @click="removeColumn" class="control-btn">
-              <X class="icon" :style="{ color: getContrastText(color.hex) }" />
-              <span class="tooltip">Supprimer</span>
-            </button>
-          </div>
+  <div class="color-box" :style="{ backgroundColor: color.hex }">
+    <!-- Affichage desktop (colonnes verticales) -->
+    <div class="content desktop-layout">
+      <div class="controls">
+        <div class="tooltip-group">
+          <button
+            @click="toggleLock"
+            class="control-btn lock"
+            :class="color.locked ? 'locked' : ''"
+          >
+            <Lock v-if="color.locked" class="icon" :style="{ color: getContrastText(color.hex) }" />
+            <Unlock v-else class="icon" :style="{ color: getContrastText(color.hex) }" />
+            <span class="tooltip">{{ color.locked ? "Déverrouiller" : "Verrouiller" }}</span>
+          </button>
         </div>
-
-        <div
-          class="hex-code"
-          @click="copyToClipboard"
-          :style="{ color: getContrastText(color.hex) }"
-        >
-          {{ color.hex.substring(1).toUpperCase() }}
+        <div class="tooltip-group">
+          <button @click="copyToClipboard" class="control-btn">
+            <Check v-if="copied" class="icon" :style="{ color: getContrastText(color.hex) }" />
+            <Copy v-else class="icon" :style="{ color: getContrastText(color.hex) }" />
+            <span class="tooltip">Copier</span>
+          </button>
         </div>
-        <div class="color-name-label" :style="{ color: getContrastText(color.hex) }">{{ colorName }}</div>
+        <div class="tooltip-group" v-if="showRemove">
+          <button @click="removeColumn" class="control-btn">
+            <X class="icon" :style="{ color: getContrastText(color.hex) }" />
+            <span class="tooltip">Supprimer</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Affichage mobile (bandes horizontales) -->
-      <div class="content mobile-layout">
-        <!-- Code hex à gauche -->
-        <div class="mobile-hex" @click="copyToClipboard" :style="{ color: getContrastText(color.hex) }">
-          {{ color.hex.toUpperCase() }}
-        </div>
-
-        <!-- Actions à droite -->
-        <div class="mobile-actions">
-          <button @click="toggleLock" class="mobile-action-btn" :class="color.locked ? 'locked' : ''">
-            <Lock v-if="color.locked" class="icon" />
-            <Unlock v-else class="icon" />
-          </button>
-          <button @click="copyToClipboard" class="mobile-action-btn">
-            <Check v-if="copied" class="icon" />
-            <Copy v-else class="icon" />
-          </button>
-          <button v-if="showRemove" @click="removeColumn" class="mobile-action-btn remove">
-            <X class="icon" />
-          </button>
-          <button v-if="showAdd" @click="addColumn" class="mobile-action-btn add">
-            <Plus class="icon" />
-          </button>
-        </div>
+      <div class="hex-code" @click="copyToClipboard" :style="{ color: getContrastText(color.hex) }">
+        {{ color.hex.substring(1).toUpperCase() }}
+      </div>
+      <div class="color-name-label" :style="{ color: getContrastText(color.hex) }">
+        {{ colorName }}
       </div>
     </div>
+
+    <!-- Affichage mobile (bandes horizontales) -->
+    <div class="content mobile-layout">
+      <!-- Code hex à gauche -->
+      <div
+        class="mobile-hex"
+        @click="copyToClipboard"
+        :style="{ color: getContrastText(color.hex) }"
+      >
+        {{ color.hex.toUpperCase() }}
+      </div>
+
+      <!-- Actions à droite -->
+      <div class="mobile-actions">
+        <button @click="toggleLock" class="mobile-action-btn" :class="color.locked ? 'locked' : ''">
+          <Lock v-if="color.locked" class="icon" />
+          <Unlock v-else class="icon" />
+        </button>
+        <button @click="copyToClipboard" class="mobile-action-btn">
+          <Check v-if="copied" class="icon" />
+          <Copy v-else class="icon" />
+        </button>
+        <button v-if="showRemove" @click="removeColumn" class="mobile-action-btn remove">
+          <X class="icon" />
+        </button>
+        <button v-if="showAdd" @click="addColumn" class="mobile-action-btn add">
+          <Plus class="icon" />
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
-
 <script lang="ts">
-import { ref, computed } from 'vue'
-import type { Color } from '../types/types'
-import { Lock, Unlock, Clipboard, Check, X, Copy } from 'lucide-vue-next'
-import { toast } from 'vue-sonner'
-import { getColorName } from '../utils/colorName'
+import { ref, computed } from "vue";
+import type { Color } from "../types/types";
+import { Lock, Unlock, Clipboard, Check, X, Copy } from "lucide-vue-next";
+import { toast } from "vue-sonner";
+import { getColorName } from "../utils/colorName";
 
 export default {
-  name: 'ColorBox',
+  name: "ColorBox",
   components: {
     Lock,
     Unlock,
     Clipboard,
     Check,
     X,
-    Copy
+    Copy,
   },
 
   props: {
     color: {
       type: Object as () => Color,
-      required: true
+      required: true,
     },
     showRemove: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
-  emits: ['toggle-lock', 'remove'],
+  emits: ["toggle-lock", "remove"],
 
   data() {
     return {
-      copied: false
-    }
+      copied: false,
+    };
   },
 
   computed: {
     colorName() {
-      return getColorName(this.color.hex)
-    }
+      return getColorName(this.color.hex);
+    },
   },
 
   methods: {
     getContrastText(hex) {
       // Enlève le # si présent
-      hex = hex.replace('#', '');
+      hex = hex.replace("#", "");
       // Convertit en RGB
-      const r = parseInt(hex.substr(0,2),16);
-      const g = parseInt(hex.substr(2,2),16);
-      const b = parseInt(hex.substr(4,2),16);
+      const r = parseInt(hex.substr(0, 2), 16);
+      const g = parseInt(hex.substr(2, 2), 16);
+      const b = parseInt(hex.substr(4, 2), 16);
       // Calcul de la luminance
-      const luminance = (0.299*r + 0.587*g + 0.114*b)/255;
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
       // Retourne noir si fond clair, blanc si fond foncé
-      return luminance > 0.6 ? '#222' : '#fff';
+      return luminance > 0.6 ? "#222" : "#fff";
     },
     async copyToClipboard() {
-      await navigator.clipboard.writeText(this.color.hex)
-      this.copied = true
-      toast.success('Couleur copiée', {
-        description: this.color.hex,
+      await navigator.clipboard.writeText(this.color.hex);
+      this.copied = true;
+      toast.success("Couleur copiée", {
         richColors: true,
-      })
+      });
       setTimeout(() => {
-        this.copied = false
-      }, 2000)
+        this.copied = false;
+      }, 2000);
     },
     toggleLock() {
-      this.$emit('toggle-lock', this.color.id)
+      this.$emit("toggle-lock", this.color.id);
       if (this.color.locked) {
-        toast.success('Colonne verrouillée', {
-          description: `La couleur ${this.color.hex} est maintenant verrouillée.`,
+        toast.info("Colonne verrouillée", {
           richColors: true,
-        })
+        });
       } else {
-        toast.warning('Colonne déverrouillée', {
-          description: `La couleur ${this.color.hex} est maintenant modifiable.`,
+        toast.warning("Colonne déverrouillée", {
           richColors: true,
-        })
+        });
       }
     },
     removeColumn() {
-      this.$emit('remove')
-      toast.error('Colonne supprimée', {
-        description: `La couleur ${this.color.hex} a été retirée.`,
+      this.$emit("remove");
+      toast.error("Colonne supprimée", {
         richColors: true,
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap");
 
 .color-box {
   height: calc(100vh - 56px);
@@ -166,7 +167,15 @@ export default {
   flex-direction: column;
   position: relative;
   transition: all 0.3s ease;
-  font-family: 'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    "Karla",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
   min-width: 0;
 }
 
@@ -241,7 +250,15 @@ export default {
   border-radius: 7px;
   will-change: auto;
   text-align: center;
-  font-family: 'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    "Karla",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
 }
 
 .hex-code:hover {
@@ -255,7 +272,7 @@ export default {
   margin-top: 0px;
   margin-bottom: 0px;
   letter-spacing: 0.5px;
-  font-family: 'Karla', Arial, sans-serif;
+  font-family: "Karla", Arial, sans-serif;
 }
 
 .icon {
@@ -284,11 +301,13 @@ export default {
   left: 50%;
   transform: translateX(-50%) translateY(-8px);
   bottom: 90%;
-  font-size: 0.70em;
+  font-size: 0.7em;
   font-weight: 500;
   pointer-events: none;
-  transition: opacity 0.18s, visibility 0.18s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+  transition:
+    opacity 0.18s,
+    visibility 0.18s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.13);
   white-space: nowrap;
 }
 
@@ -390,7 +409,7 @@ export default {
     padding: 8px 12px;
     border-radius: 6px;
     transition: all 0.2s ease;
-    font-family: 'Karla', monospace;
+    font-family: "Karla", monospace;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
   }
@@ -427,5 +446,3 @@ export default {
   }
 }
 </style>
-
-

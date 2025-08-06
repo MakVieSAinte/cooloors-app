@@ -12,42 +12,106 @@
       <!-- Menu desktop -->
       <div class="nav-right nav-desktop">
         <button class="nav-button" title="Retour" :disabled="!canUndo" @click="handleUndo">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
-</svg>
-
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6 icon-svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
+            />
+          </svg>
         </button>
         <button class="nav-button" title="Suivant" :disabled="!canRedo" @click="handleRedo">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m15 15 6-6m0 0-6-6m6 6H9a6 6 0 0 0 0 12h3" />
-</svg>
-
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6 icon-svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m15 15 6-6m0 0-6-6m6 6H9a6 6 0 0 0 0 12h3"
+            />
+          </svg>
         </button>
         <button class="nav-button" title="Mode Sombre" @click="toggleTheme">
+          <svg
+            v-if="isDarkMode"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6 icon-svg2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
+            />
+          </svg>
 
-          <svg v-if="isDarkMode" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg2">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
-</svg>
-
-          <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg2">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-</svg>
-
+          <svg
+            v-else
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6 icon-svg2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
+            />
+          </svg>
         </button>
         <div class="spacer"></div>
         <button class="nav-button primary" @click="savePalette">
           <!-- <Heart class="icon" /> -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-</svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6 icon-svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+            />
+          </svg>
 
           Sauvegarder
         </button>
         <button v-if="user" class="nav-button" @click="fetchPalettes" title="Mes palettes">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg2">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 0 0 5.304 0l6.401-6.402M6.75 21A3.75 3.75 0 0 1 3 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 0 0 3.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008Z" />
-</svg>
- Mes palettes
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6 icon-svg2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4.098 19.902a3.75 3.75 0 0 0 5.304 0l6.401-6.402M6.75 21A3.75 3.75 0 0 1 3 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 0 0 3.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008Z"
+            />
+          </svg>
+          Mes palettes
         </button>
 
         <button v-if="!user" class="nav-button" @click="loginFigma" title="Connexion Figma">
@@ -58,10 +122,6 @@
           />
           Connexion Figma
         </button>
-        <!-- <span v-else style="display: flex; align-items: center; gap: 8px">
-          <span style="font-size: 0.95em; opacity: 0.8">{{ user.email }}</span>
-          <button class="nav-button" @click="logout" title="Déconnexion">Déconnexion</button>
-        </span> -->
         <span v-else @click="showModalProfil = true" class="profil">
           <span class="initials">{{ user.email.charAt(0).toUpperCase() }}</span>
         </span>
@@ -89,7 +149,8 @@
               <ChevronRight class="icon" /> Suivant
             </button>
             <button class="nav-button" @click="toggleTheme">
-              <Moon v-if="isDarkMode" class="icon" /><Sun v-else class="icon" />
+              <Moon v-if="isDarkMode" class="icon" />
+              <Sun v-else class="icon" />
               Thème
             </button>
             <button v-if="!user" class="nav-button" @click="loginFigma">
@@ -117,8 +178,8 @@
     <div v-if="showPalettesModal" class="modal-overlay" @click.self="showPalettesModal = false">
       <div class="modal-content">
         <h2>Mes palettes sauvegardées</h2>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <div v-if="loadingPalettes">Chargement...</div>
         <div v-else-if="palettes.length === 0">Aucune palette sauvegardée.</div>
         <ul v-else style="list-style: none; padding: 0; max-height: 50vh; overflow: auto">
@@ -138,38 +199,84 @@
                 ></div>
               </div>
               <span style="font-size: 0.95em; opacity: 0.7">{{ palette.name }}</span>
-              <div style="display: flex; gap: 6px; align-items: center;">
+              <div style="display: flex; gap: 6px; align-items: center">
                 <button class="nav-button" @click="loadPalette(palette)">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6 icon-svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
                   </svg>
                 </button>
                 <button class="nav-button" @click="printPalette(palette)">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6 icon-svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z"
+                    />
                   </svg>
                 </button>
                 <button class="nav-button" @click="sharePalette(palette)">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-</svg>
-
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6 icon-svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+                    />
+                  </svg>
                 </button>
                 <button class="nav-button" @click="deletePalette(palette)" style="color: #e74c3c">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6 icon-svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                    />
                   </svg>
                 </button>
               </div>
-
             </div>
             <div style="font-size: 0.8em; opacity: 0.6">
               {{ new Date(palette.created_at).toLocaleString() }}
             </div>
           </li>
         </ul>
-        <br>
+        <br />
         <button
           class="nav-button primary"
           @click="showPalettesModal = false"
@@ -186,7 +293,13 @@
         <p>Voulez-vous vraiment supprimer cette palette ? Cette action est irréversible.</p>
         <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px">
           <button class="nav-button" @click="cancelDeletePalette">Annuler</button>
-          <button class="nav-button primary" style="background: #e74c3c; color: #fff" @click="confirmDeletePalette">Supprimer</button>
+          <button
+            class="nav-button primary"
+            style="background: #e74c3c; color: #fff"
+            @click="confirmDeletePalette"
+          >
+            Supprimer
+          </button>
         </div>
       </div>
     </div>
@@ -194,23 +307,34 @@
     <div v-if="user && showModalProfil" class="modal-overlay" @click.self="showModalProfil = false">
       <div class="modal-content">
         <h2>Mon Profil</h2>
-        <br>
+        <br />
         <div class="content-modal-profil">
           <div class="bloc-logout-profil">
             <span class="profil modal">
               <span class="initials">{{ user.email.charAt(0).toUpperCase() }}</span>
             </span>
             <button class="nav-button logout" @click="logout" title="Déconnexion">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 icon-svg">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6 icon-svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+                />
               </svg>
               Déconnexion
             </button>
           </div>
           <p><strong>Email :</strong> {{ user.email }}</p>
-          <p><strong>ID utilisateur :</strong> {{ (user.id).substring(0, 30) }}...</p>
+          <p><strong>ID utilisateur :</strong> {{ user.id.substring(0, 30) }}...</p>
         </div>
-        <br>
+        <br />
         <button
           class="nav-button primary"
           @click="showModalProfil = false"
@@ -222,26 +346,22 @@
     </div>
 
     <!-- Modal de bienvenue (affiché une seule fois) -->
-    <div v-if="showWelcomeModal" class="modal-overlay" @click.self="closeWelcomeModal">
-      <div class="modal-content" style="max-width: 400px; text-align: center;">
-        <img src="https://avatars.githubusercontent.com/u/10222538?v=4" alt="Photo de profil" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 18px; box-shadow: 0 2px 12px #0002;" />
-        <h2 style="margin-bottom: 8px;">Makri Vie</h2>
-        <p style="font-size: 1.05em; opacity: 0.85; margin-bottom: 18px;">Développeur passionné par le design, le code et la création d'outils pour les créatifs. Bienvenue sur mon générateur de palettes inspiré de Coolors !</p>
-        <div style="display: flex; justify-content: center; gap: 18px; margin-bottom: 18px;">
-          <a href="https://github.com/MakVieSAinte" target="_blank" title="GitHub" style="color: #222; font-size: 1.7em;"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.483 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.339-2.221-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.987 1.029-2.687-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.7 1.028 1.594 1.028 2.687 0 3.847-2.337 4.695-4.566 4.944.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.749 0 .268.18.579.688.481C19.138 20.2 22 16.448 22 12.021 22 6.484 17.523 2 12 2Z" fill="currentColor"/></svg></a>
-          <a href="https://twitter.com/makvie" target="_blank" title="Twitter" style="color: #1da1f2; font-size: 1.7em;"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.46 5.924c-.793.352-1.645.59-2.54.698a4.48 4.48 0 0 0 1.963-2.475 8.94 8.94 0 0 1-2.828 1.082A4.48 4.48 0 0 0 16.11 4c-2.488 0-4.507 2.02-4.507 4.507 0 .353.04.697.117 1.026C7.728 9.37 4.1 7.6 1.67 4.905c-.387.664-.61 1.437-.61 2.26 0 1.56.795 2.936 2.005 3.744-.738-.023-1.432-.226-2.04-.565v.057c0 2.18 1.55 4.002 3.604 4.418-.377.103-.775.158-1.186.158-.29 0-.57-.028-.844-.08.57 1.78 2.223 3.078 4.183 3.113A8.99 8.99 0 0 1 2 19.54a12.7 12.7 0 0 0 6.88 2.017c8.253 0 12.774-6.837 12.774-12.774 0-.195-.004-.39-.013-.583A9.14 9.14 0 0 0 24 4.59a8.97 8.97 0 0 1-2.54.697z" fill="currentColor"/></svg></a>
-          <a href="https://www.linkedin.com/in/makri-vie/" target="_blank" title="LinkedIn" style="color: #0077b5; font-size: 1.7em;"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.966 0-1.75-.79-1.75-1.75s.784-1.75 1.75-1.75 1.75.79 1.75 1.75-.784 1.75-1.75 1.75zm15.5 10.28h-3v-4.5c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.17-1.73 2.38v4.59h-3v-9h2.89v1.23h.04c.4-.76 1.38-1.56 2.84-1.56 3.04 0 3.6 2 3.6 4.59v4.74z" fill="currentColor"/></svg></a>
-        </div>
-        <button class="nav-button primary" @click="closeWelcomeModal" style="margin-top: 8px;">Continuer</button>
-      </div>
-    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { useColorStore } from "@/stores/colorStore";
-import { ChevronLeft, ChevronRight, CornerUpLeft, Heart, Sun, Moon, AlignJustify, X } from "lucide-vue-next";
+import {
+  ChevronLeft,
+  ChevronRight,
+  CornerUpLeft,
+  Heart,
+  Sun,
+  Moon,
+  AlignJustify,
+  X,
+} from "lucide-vue-next";
 import { supabase } from "./supabase";
 import jsPDF from "jspdf";
 import { Toaster, toast } from "vue-sonner";
@@ -300,9 +420,9 @@ export default defineComponent({
       }
     });
     // Modal de bienvenue (une seule fois)
-    if (!localStorage.getItem('cooloors_welcome_shown')) {
+    if (!localStorage.getItem("cooloors_welcome_shown")) {
       this.showWelcomeModal = true;
-      localStorage.setItem('cooloors_welcome_shown', '1');
+      localStorage.setItem("cooloors_welcome_shown", "1");
     }
     // Vérifier si l'utilisateur est déjà connecté
     const {
@@ -335,28 +455,22 @@ export default defineComponent({
     },
     async loginFigma() {
       await supabase.auth.signInWithOAuth({ provider: "figma" });
-      toast.success("Redirection vers Figma", {
-        description: "Vous allez être redirigé pour vous connecter avec Figma.",
-      });
+      toast.success("Redirection vers Figma");
     },
     async logout() {
       await supabase.auth.signOut();
       this.user = null;
-      toast.success("Déconnexion réussie", {
-        description: "Vous êtes déconnecté.",
-      });
+      toast.success("Déconnexion réussie");
     },
     async savePalette() {
       if (!this.user) {
-        toast.error("Connexion requise", {
-          description: "Connectez-vous avec Figma pour sauvegarder vos palettes !",
+        toast.error("Connexion requise pour sauvegarder vos palettes", {
           richColors: true,
         });
         return;
       }
       if (!this.store.colors || this.store.colors.length === 0) {
         toast.warning("Palette vide", {
-          description: "Ajoutez des couleurs avant de sauvegarder.",
           richColors: true,
         });
         return;
@@ -373,8 +487,7 @@ export default defineComponent({
         ]);
         error = res.error;
       } catch (e) {
-        toast.error("Erreur réseau", {
-          description: "Impossible de contacter le serveur. Vérifiez votre connexion.",
+        toast.error("Erreur réseau. Vérifiez votre connexion.", {
           richColors: true,
         });
         return;
@@ -382,18 +495,15 @@ export default defineComponent({
       if (error) {
         if (error.code === "42501" || error.code === "permission_denied") {
           toast.error("Accès refusé", {
-            description: "Vous n’avez pas les droits pour cette action.",
             richColors: true,
           });
         } else {
           toast.error("Erreur lors de la sauvegarde", {
-            description: error.message,
             richColors: true,
           });
         }
       } else {
         toast.success("Palette sauvegardée !", {
-          description: "Votre palette a bien été enregistrée.",
           richColors: true,
         });
       }
@@ -405,8 +515,7 @@ export default defineComponent({
 
     async fetchPalettes() {
       if (!this.user) {
-        toast.warning("Non connecté", {
-          description: "Connectez-vous pour voir vos palettes.",
+        toast.info("Connectez-vous pour voir vos palettes.", {
           richColors: true,
         });
         return;
@@ -424,8 +533,7 @@ export default defineComponent({
         error = res.error;
       } catch (e) {
         this.loadingPalettes = false;
-        toast.error("Erreur réseau", {
-          description: "Impossible de charger les palettes. Vérifiez votre connexion.",
+        toast.error("Impossible de charger les palettes.", {
           richColors: true,
         });
         return;
@@ -433,14 +541,12 @@ export default defineComponent({
       this.loadingPalettes = false;
       if (error) {
         toast.error("Erreur lors du chargement", {
-          description: error.message,
           richColors: true,
         });
         return;
       }
       if (!data || data.length === 0) {
         toast.info("Aucune palette trouvée", {
-          description: "Vous n’avez pas encore sauvegardé de palette.",
           richColors: true,
         });
       }
@@ -468,8 +574,7 @@ export default defineComponent({
         const res = await supabase.from("palettes").delete().eq("id", this.paletteToDelete.id);
         error = res.error;
       } catch (e) {
-        toast.error("Erreur réseau", {
-          description: "Impossible de supprimer la palette.",
+        toast.error("Impossible de supprimer la palette.", {
           richColors: true,
         });
         this.cancelDeletePalette();
@@ -477,12 +582,10 @@ export default defineComponent({
       }
       if (error) {
         toast.error("Erreur lors de la suppression", {
-          description: error.message,
           richColors: true,
         });
       } else {
         toast.success("Palette supprimée", {
-          description: "La palette a bien été supprimée.",
           richColors: true,
         });
         this.palettes = this.palettes.filter((p) => p.id !== this.paletteToDelete.id);
@@ -517,7 +620,7 @@ export default defineComponent({
     },
     sharePalette(palette) {
       // Génère un lien de partage avec les couleurs encodées dans l'URL
-      const colors = encodeURIComponent(palette.colors.join(','));
+      const colors = encodeURIComponent(palette.colors.join(","));
       const url = `${window.location.origin}/share/${colors}`;
       navigator.clipboard.writeText(url);
       toast.success("Lien de partage copié !", {
@@ -540,9 +643,10 @@ export default defineComponent({
   --button-text: #333333;
   --primary-button: #333333;
   --primary-button-text: #ffffff;
-  --border-nav: #EEE;
-  --main-font: "Karla", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, sans-serif;
+  --border-nav: #eee;
+  --main-font:
+    "Karla", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
 }
 
 html,
@@ -588,7 +692,9 @@ body,
   flex-direction: column;
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   overflow: hidden;
   font-family: var(--main-font);
 }
@@ -604,7 +710,9 @@ body,
   border-bottom: 2px solid var(--border-nav);
   position: relative;
   z-index: 1000;
-  transition: background-color 0.3s ease, border 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border 0.3s ease;
 }
 
 .nav-left,
@@ -695,6 +803,7 @@ body,
   font-weight: bold;
   cursor: pointer;
 }
+
 .profil.modal {
   width: 80px;
   height: 80px;
@@ -776,6 +885,7 @@ nav a:first-of-type {
   justify-content: center;
   z-index: 2000;
 }
+
 .modal-content {
   background: #fff;
   color: #222;
@@ -785,6 +895,7 @@ nav a:first-of-type {
   max-width: 90vw;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
 }
+
 .dark .modal-content {
   background: #232323;
   color: #fff;
@@ -803,22 +914,27 @@ nav a:first-of-type {
   align-items: center;
   gap: 30px;
 }
+
 /* Hamburger menu styles */
 .nav-hamburger {
   display: none;
 }
+
 .nav-desktop {
   display: flex;
 }
+
 @media (max-width: 900px) {
   .nav-text {
     display: none;
   }
 }
+
 @media (max-width: 768px) {
   .nav-desktop {
     display: none !important;
   }
+
   .nav-hamburger {
     display: flex !important;
     background: none;
@@ -830,6 +946,7 @@ nav a:first-of-type {
     z-index: 1100;
   }
 }
+
 .mobile-menu-overlay {
   position: fixed;
   top: 0;
@@ -842,6 +959,7 @@ nav a:first-of-type {
   justify-content: flex-end;
   z-index: 2000;
 }
+
 .mobile-menu {
   background: var(--bg-color);
   color: var(--text-color);
@@ -856,6 +974,7 @@ nav a:first-of-type {
   position: relative;
   animation: slideIn 0.2s;
 }
+
 .close-btn {
   position: absolute;
   top: 12px;
@@ -866,18 +985,22 @@ nav a:first-of-type {
   color: inherit;
   cursor: pointer;
 }
+
 @keyframes slideIn {
   from {
     transform: translateX(100%);
   }
+
   to {
     transform: translateX(0);
   }
 }
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
