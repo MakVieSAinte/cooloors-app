@@ -1,0 +1,1 @@
+(Ce fichier est requis pour l'intégration de la police Karla dans le PDF exporté. Placez ici le fichier Karla-Regular.ttf téléchargé depuis Google Fonts : https://fonts.google.com/specimen/Karla)

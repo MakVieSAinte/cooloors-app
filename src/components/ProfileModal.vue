@@ -9,7 +9,7 @@
       <br />
       <button class="main-btn">Suivez-moi sur LinkedInd</button>
       <p class="modal-info">
-        Ce projet est un clone de
+        Ce projet est un clone de  
         <a
           href="https://coolors.co/004777-a30000-efd28d-f57200-00afb5"
           target="_blank"
