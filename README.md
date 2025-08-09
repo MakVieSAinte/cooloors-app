@@ -10,15 +10,6 @@
 
 ---
 
-## ✨ Aperçu
-
-![Aperçu Kolor App - Desktop](./public/preview-desktop.png)
-![Aperçu Kolor App - Mobile](./public/preview-mobile.png)
-
-_(Ajoute tes captures d'écran dans `public/` pour un rendu optimal)_
-
----
-
 ## 🚀 Fonctionnalités
 
 - 🎲 Génération aléatoire de palettes harmonieuses
@@ -95,18 +86,6 @@ Place une icône source `public/icon.png` (512x512px), puis :
 ```sh
 npm run generate-pwa-icons
 ```
-
----
-
-## 🔒 Variables d'environnement
-
-Crée un fichier `.env` à la racine avec :
-
-```
-VITE_SUPABASE_URL=...
-VITE_SUPABASE_ANON_KEY=...
-```
-
 ---
 
 ## 📱 PWA & Installation
