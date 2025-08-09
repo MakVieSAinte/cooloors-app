@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap');
 
 /* ========== VARIABLES GLOBALES ========== */
 :root {
@@ -15,7 +15,7 @@
   --border-color: #eee;
   --hover-color: #f5f5f5;
   --main-font:
-    "Karla", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
     sans-serif;
   --color-count: 5;
   --primary-color: #3498db; /* Couleur principale */
@@ -105,21 +105,22 @@ body,
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0px;
 }
 
 .logo {
-  height: 120px;
+  height: 45px;
 }
 
 .spacer {
-  width: 5px;
+  width: 20px;
 }
 
 .nav-text {
   color: var(--text-color);
   font-size: 0.9rem;
   opacity: 0.8;
+  margin-top: 2px;
 }
 
 /* ========== BOUTONS ========== */
@@ -512,7 +513,7 @@ body,
   }
 
   .logo {
-    height: 20px;
+    height: 40px;
   }
 
   .nav-desktop {
@@ -719,7 +720,7 @@ nav a:first-of-type {
 
 /* Flèche du tooltip */
 .tooltip::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 100%;
   left: 50%;
@@ -983,7 +984,7 @@ nav a:first-of-type {
     min-width: 0;
     overflow: hidden;
   }
-  
+
   .footer-btn .icon-svg {
     width: 18px;
     height: 18px;
@@ -1026,18 +1027,18 @@ nav a:first-of-type {
   .nav-button:not(.primary) span:not(.icon) {
     display: none;
   }
-  
+
   .mobile-footer {
     padding: 6px 8px;
     gap: 4px;
   }
-  
+
   .footer-btn {
     padding: 6px 2px;
     border-radius: 8px;
     font-size: 9px;
   }
-  
+
   .footer-btn .icon-svg {
     width: 16px;
     height: 16px;
@@ -1048,7 +1049,7 @@ nav a:first-of-type {
   .footer-btn span {
     font-size: 8px;
   }
-  
+
   .footer-btn .icon-svg {
     width: 14px;
     height: 14px;

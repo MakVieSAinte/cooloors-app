@@ -2,13 +2,20 @@
   <nav class="navbar">
     <div class="nav-left">
       <img src="@/assets/logo.png" alt="Coolors" class="logo" />
+      <span class="nav-name">kolor</span>
       <div class="spacer"></div>
       <span class="nav-text">Appuyez sur la barre d'espace pour générer une palette.</span>
     </div>
 
     <!-- Menu desktop -->
     <div class="nav-right nav-desktop">
-      <button class="nav-button" title="Retour" :disabled="!canUndo" :class="{ 'disabled-btn': !canUndo }" @click="handleUndo">
+      <button
+        class="nav-button"
+        title="Retour"
+        :disabled="!canUndo"
+        :class="{ 'disabled-btn': !canUndo }"
+        @click="handleUndo"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -24,7 +31,13 @@
           />
         </svg>
       </button>
-      <button class="nav-button" title="Suivant" :disabled="!canRedo" :class="{ 'disabled-btn': !canRedo }" @click="handleRedo">
+      <button
+        class="nav-button"
+        title="Suivant"
+        :disabled="!canRedo"
+        :class="{ 'disabled-btn': !canRedo }"
+        @click="handleRedo"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -138,7 +151,12 @@
           <button class="close-btn" @click="closeMobileMenu">
             <X class="icon" />
           </button>
-          <button class="nav-button" :disabled="!canUndo" :class="{ 'disabled-btn': !canUndo }" @click="handleUndo">
+          <button
+            class="nav-button"
+            :disabled="!canUndo"
+            :class="{ 'disabled-btn': !canUndo }"
+            @click="handleUndo"
+          >
             <ChevronLeft class="icon" /> Précédent
           </button>
           <button class="nav-button" :disabled="!canRedo" @click="handleRedo">
@@ -171,19 +189,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Heart,
-  Sun,
-  Moon,
-  AlignJustify,
-  X,
-} from "lucide-vue-next";
+import { defineComponent } from 'vue'
+import { ChevronLeft, ChevronRight, Heart, Sun, Moon, AlignJustify, X } from 'lucide-vue-next'
 
 export default defineComponent({
-  name: "NavbarComponent",
+  name: 'NavbarComponent',
   components: {
     ChevronLeft,
     ChevronRight,
@@ -229,39 +239,47 @@ export default defineComponent({
   ],
   methods: {
     handleUndo() {
-      this.$emit('undo');
+      this.$emit('undo')
     },
     handleRedo() {
-      this.$emit('redo');
+      this.$emit('redo')
     },
     toggleTheme() {
-      this.$emit('toggle-theme');
+      this.$emit('toggle-theme')
     },
     savePalette() {
-      this.$emit('save-palette');
+      this.$emit('save-palette')
     },
     fetchPalettes() {
-      this.$emit('fetch-palettes');
+      this.$emit('fetch-palettes')
     },
     loginFigma() {
-      this.$emit('login-figma');
+      this.$emit('login-figma')
     },
     logout() {
-      this.$emit('logout');
+      this.$emit('logout')
     },
     showModalProfil() {
-      this.$emit('show-modal-profil');
+      this.$emit('show-modal-profil')
     },
     toggleMobileMenu() {
-      this.$emit('toggle-mobile-menu');
+      this.$emit('toggle-mobile-menu')
     },
     closeMobileMenu() {
-      this.$emit('close-mobile-menu');
+      this.$emit('close-mobile-menu')
     },
-  }
-});
+  },
+})
 </script>
 
 <style>
-/* Les styles ont été déplacés dans src/assets/main.css */
+.nav-name {
+  color: var(--text-color);
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: -2.5px;
+  margin: 0px;
+  padding: 0px;
+  max-width: 100%;
+}
 </style>

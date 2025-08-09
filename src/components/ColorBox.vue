@@ -12,7 +12,7 @@
             <Lock v-if="color.locked" class="icon" :style="{ color: getContrastText(color.hex) }" />
             <Unlock v-else class="icon" :style="{ color: getContrastText(color.hex) }" />
           </button>
-          <span class="tooltip">{{ color.locked ? "Déverrouiller" : "Verrouiller" }}</span>
+          <span class="tooltip">{{ color.locked ? 'Déverrouiller' : 'Verrouiller' }}</span>
         </div>
         <div class="tooltip-group">
           <button @click="copyToClipboard" class="control-btn">
@@ -70,14 +70,14 @@
 </template>
 
 <script lang="ts">
-import { ref, computed } from "vue";
-import type { Color } from "../types/types";
-import { Lock, Unlock, Clipboard, Check, X, Copy } from "lucide-vue-next";
-import { toast } from "vue-sonner";
-import { getColorName } from "../utils/colorName";
+import { ref, computed } from 'vue'
+import type { Color } from '../types/types'
+import { Lock, Unlock, Clipboard, Check, X, Copy } from 'lucide-vue-next'
+import { toast } from 'vue-sonner'
+import { getColorName } from '../utils/colorName'
 
 export default {
-  name: "ColorBox",
+  name: 'ColorBox',
   components: {
     Lock,
     Unlock,
@@ -89,74 +89,79 @@ export default {
 
   props: {
     color: {
-      type: Object as () => Color,
+      type: Object as PropType<Color>,
       required: true,
     },
     showRemove: {
       type: Boolean,
       default: false,
     },
+    showAdd: {
+      type: Boolean,
+      default: false,
+    },
+    colorIndex: {
+      type: Number,
+      required: true,
+    },
   },
-
-  emits: ["toggle-lock", "remove"],
+  emits: ['toggle-lock', 'remove'],
 
   data() {
     return {
       copied: false,
-    };
+    }
   },
 
   computed: {
     colorName() {
-      return getColorName(this.color.hex);
+      return getColorName(this.color.hex)
     },
   },
 
   methods: {
     getContrastText(hex) {
       // Enlève le # si présent
-      hex = hex.replace("#", "");
+      hex = hex.replace('#', '')
       // Convertit en RGB
-      const r = parseInt(hex.substr(0, 2), 16);
-      const g = parseInt(hex.substr(2, 2), 16);
-      const b = parseInt(hex.substr(4, 2), 16);
+      const r = parseInt(hex.substr(0, 2), 16)
+      const g = parseInt(hex.substr(2, 2), 16)
+      const b = parseInt(hex.substr(4, 2), 16)
       // Calcul de la luminance
-      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
       // Retourne noir si fond clair, blanc si fond foncé
-      return luminance > 0.6 ? "#222" : "#fff";
+      return luminance > 0.6 ? '#222' : '#fff'
     },
     async copyToClipboard() {
-      await navigator.clipboard.writeText(this.color.hex);
-      this.copied = true;
-      toast.success("Couleur copiée", {
+      await navigator.clipboard.writeText(this.color.hex)
+      this.copied = true
+      toast.success('Couleur copiée', {
         richColors: true,
-      });
+      })
       setTimeout(() => {
-        this.copied = false;
-      }, 2000);
+        this.copied = false
+      }, 2000)
     },
     toggleLock() {
-      this.$emit("toggle-lock", this.color.id);
+      this.$emit('toggle-lock', this.color.id)
       if (this.color.locked) {
-        toast.info("Colonne verrouillée", {
+        toast.info('Colonne verrouillée', {
           richColors: true,
-        });
+        })
       } else {
-        toast.warning("Colonne déverrouillée", {
+        toast.warning('Colonne déverrouillée', {
           richColors: true,
-        });
+        })
       }
     },
     removeColumn() {
-      this.$emit("remove");
-      toast.error("Colonne supprimée", {
+      this.$emit('remove')
+      toast.error('Colonne supprimée', {
         richColors: true,
-      });
+      })
     },
   },
-};
+}
 </script>
 
-<style scoped>
-/* Les styles ont été déplacés dans src/assets/main.css */
-</style>
+<style scoped></style>

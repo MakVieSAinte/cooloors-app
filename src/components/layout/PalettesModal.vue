@@ -1,8 +1,30 @@
 <template>
   <div v-if="showPalettesModal" class="modal-overlay" @click.self="closePalettesModal">
-    <div class="modal-content" style="position: relative;">
-      <button class="nav-button" @click="closePalettesModal" style="position: absolute; top: 18px; right: 18px; background: none; border: none; box-shadow: none; z-index: 10;" title="Fermer">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6 icon-svg"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    <div class="modal-content" style="position: relative">
+      <button
+        class="nav-button"
+        @click="closePalettesModal"
+        style="
+          position: absolute;
+          top: 18px;
+          right: 18px;
+          background: none;
+          border: none;
+          box-shadow: none;
+          z-index: 10;
+        "
+        title="Fermer"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          class="size-6 icon-svg"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
       </button>
       <h2>Mes palettes sauvegardées</h2>
       <br />
@@ -26,8 +48,20 @@
               ></div>
             </div>
             <span style="font-size: 0.95em; opacity: 0.7">{{ palette.name }}</span>
-            <div style="display: flex; gap: 6px; align-items: center; margin-left: auto; position: relative;">
-              <button class="nav-button" @click.stop="togglePaletteActions(palette)" title="Options">
+            <div
+              style="
+                display: flex;
+                gap: 6px;
+                align-items: center;
+                margin-left: auto;
+                position: relative;
+              "
+            >
+              <button
+                class="nav-button"
+                @click.stop="togglePaletteActions(palette)"
+                title="Options"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -43,7 +77,11 @@
                   />
                 </svg>
               </button>
-              <div v-if="palette.showActions" class="palette-actions-menu" v-click-outside="() => closePaletteActions(palette)">
+              <div
+                v-if="palette.showActions"
+                class="palette-actions-menu"
+                v-click-outside="() => closePaletteActions(palette)"
+              >
                 <button class="menu-item" @click="loadPalette(palette)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -130,23 +168,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "PalettesModal",
+  name: 'PalettesModal',
   props: {
     showPalettesModal: {
       type: Boolean,
-      required: true
+      required: true,
     },
     palettes: {
       type: Array,
-      required: true
+      required: true,
     },
     loadingPalettes: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   emits: [
     'close',
@@ -155,7 +193,7 @@ export default defineComponent({
     'load-palette',
     'print-palette',
     'share-palette',
-    'delete-palette'
+    'delete-palette',
   ],
   directives: {
     clickOutside: {
@@ -167,50 +205,54 @@ export default defineComponent({
             // Ne réagit pas aux clics sur le menu lui-même
             if (!(el === event.target || el.contains(event.target))) {
               // Ne déclenche pas l'événement si le clic vient du bouton qui ouvre le menu
-              const openButton = event.target.closest('.nav-button');
-              if (!openButton || !openButton.hasAttribute('title') || openButton.getAttribute('title') !== 'Options') {
-                el.__vueClickOutside__.handler();
+              const openButton = event.target.closest('.nav-button')
+              if (
+                !openButton ||
+                !openButton.hasAttribute('title') ||
+                openButton.getAttribute('title') !== 'Options'
+              ) {
+                el.__vueClickOutside__.handler()
               }
             }
-          }
-        };
+          },
+        }
 
         // Utiliser requestAnimationFrame pour s'assurer que le DOM a été mis à jour
         requestAnimationFrame(() => {
-          document.addEventListener('click', el.__vueClickOutside__.handleEvent, true);
-        });
+          document.addEventListener('click', el.__vueClickOutside__.handleEvent, true)
+        })
       },
       unmounted(el) {
         // Nettoyer l'événement lors du démontage
         if (el.__vueClickOutside__) {
-          document.removeEventListener('click', el.__vueClickOutside__.handleEvent, true);
-          delete el.__vueClickOutside__;
+          document.removeEventListener('click', el.__vueClickOutside__.handleEvent, true)
+          delete el.__vueClickOutside__
         }
       },
     },
   },
   methods: {
     closePalettesModal() {
-      this.$emit('close');
+      this.$emit('close')
     },
     togglePaletteActions(palette) {
-      this.$emit('toggle-actions', palette);
+      this.$emit('toggle-actions', palette)
     },
     closePaletteActions(palette) {
-      this.$emit('close-actions', palette);
+      this.$emit('close-actions', palette)
     },
     loadPalette(palette) {
-      this.$emit('load-palette', palette);
+      this.$emit('load-palette', palette)
     },
     printPalette(palette) {
-      this.$emit('print-palette', palette);
+      this.$emit('print-palette', palette)
     },
     sharePalette(palette) {
-      this.$emit('share-palette', palette);
+      this.$emit('share-palette', palette)
     },
     deletePalette(palette) {
-      this.$emit('delete-palette', palette);
-    }
-  }
-});
+      this.$emit('delete-palette', palette)
+    },
+  },
+})
 </script>

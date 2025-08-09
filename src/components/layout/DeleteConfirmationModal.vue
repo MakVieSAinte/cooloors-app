@@ -18,24 +18,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "DeleteConfirmationModal",
+  name: 'DeleteConfirmationModal',
   props: {
     show: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   emits: ['cancel', 'confirm'],
   methods: {
     cancel() {
-      this.$emit('cancel');
+      this.$emit('cancel')
     },
     confirm() {
-      this.$emit('confirm');
-    }
-  }
-});
+      this.$emit('confirm')
+    },
+  },
+})
 </script>

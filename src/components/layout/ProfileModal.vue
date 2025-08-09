@@ -30,40 +30,34 @@
         <p><strong>ID utilisateur :</strong> {{ user.id.substring(0, 30) }}...</p>
       </div>
       <br />
-      <button
-        class="nav-button primary"
-        @click="close"
-        style="margin-top: 16px"
-      >
-        Fermer
-      </button>
+      <button class="nav-button primary" @click="close" style="margin-top: 16px">Fermer</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "ProfileModal",
+  name: 'ProfileModal',
   props: {
     user: {
       type: Object,
-      required: true
+      required: true,
     },
     show: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   emits: ['close', 'logout'],
   methods: {
     close() {
-      this.$emit('close');
+      this.$emit('close')
     },
     logout() {
-      this.$emit('logout');
-    }
-  }
-});
+      this.$emit('logout')
+    },
+  },
+})
 </script>

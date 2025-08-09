@@ -26,17 +26,15 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from "vue-router";
-import { ref, computed } from "vue";
+import { useRoute } from 'vue-router'
+import { ref, computed } from 'vue'
 
-const route = useRoute();
-const colorsParam = route.params.colors as string | undefined;
+const route = useRoute()
+const colorsParam = route.params.colors as string | undefined
 const colors = computed(() => {
-  if (!colorsParam) return [];
-  return decodeURIComponent(colorsParam).split(",").filter(Boolean);
-});
+  if (!colorsParam) return []
+  return decodeURIComponent(colorsParam).split(',').filter(Boolean)
+})
 </script>
 
-<style scoped>
-/* Les styles ont été déplacés dans src/assets/main.css */
-</style>
+<style scoped></style>

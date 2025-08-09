@@ -123,14 +123,14 @@
   </div>
 </template>
 <script lang="ts">
-import { useColorStore } from "@/stores/colorStore";
-import ColorBox from "@/components/ColorBox.vue";
-import AddColumnButton from "@/components/AddColumnButton.vue";
-import ProfileModal from "@/components/ProfileModal.vue";
-import { Toaster, toast } from "vue-sonner";
+import { useColorStore } from '@/stores/colorStore'
+import ColorBox from '@/components/ColorBox.vue'
+import AddColumnButton from '@/components/AddColumnButton.vue'
+import ProfileModal from '@/components/ProfileModal.vue'
+import { Toaster, toast } from 'vue-sonner'
 
 export default {
-  name: "HomeView",
+  name: 'HomeView',
 
   components: {
     ColorBox,
@@ -142,102 +142,100 @@ export default {
     return {
       store: useColorStore(),
       showProfileModal: false,
-    };
+    }
   },
 
   computed: {
     colors() {
-      return this.store.colors;
+      return this.store.colors
     },
     currentIndex() {
-      return this.store.currentIndex;
+      return this.store.currentIndex
     },
     history() {
-      return this.store.history;
+      return this.store.history
     },
     canUndo() {
-      return this.store.currentIndex > 0;
+      return this.store.currentIndex > 0
     },
     canRedo() {
-      return this.store.currentIndex < this.store.history.length - 1;
+      return this.store.currentIndex < this.store.history.length - 1
     },
   },
 
   methods: {
     generatePalette() {
-      this.store.generatePalette();
+      this.store.generatePalette()
     },
     toggleLock(id: string) {
-      this.store.toggleLock(id);
+      this.store.toggleLock(id)
     },
     addColorColumn(index: number) {
       if (this.colors.length >= 6) {
         toast.warning("Impossible d'ajouter plus de 6 colonne.", {
           richColors: true,
-        });
-        return;
+        })
+        return
       }
-      this.store.addColorColumn(index);
+      this.store.addColorColumn(index)
     },
     removeColorColumn(index: number) {
-      this.store.removeColorColumn(index);
+      this.store.removeColorColumn(index)
     },
     undo() {
-      this.store.undo();
+      this.store.undo()
     },
     redo() {
-      this.store.redo();
+      this.store.redo()
     },
     savePalette() {
-      toast.info("Palette sauvegardée", {
+      toast.info('Palette sauvegardée', {
         richColors: true,
-      });
+      })
       // Ici, vous pouvez ajouter la logique pour sauvegarder la palette
     },
     fetchPalettes() {
-      toast.info("Chargement des palettes", {
+      toast.info('Chargement des palettes', {
         richColors: true,
-      });
+      })
       // Ici, vous pouvez ajouter la logique pour charger les palettes enregistrées
-      this.showProfileModal = true; // Pour l'instant, on ouvre juste le modal profil
+      this.showProfileModal = true // Pour l'instant, on ouvre juste le modal profil
     },
   },
 
   mounted() {
-    this.generatePalette();
+    this.generatePalette()
 
     // Gestion du modal de bienvenue (localStorage, expiration 3 jours)
-    const welcomeKey = "profileModalWelcome";
-    const now = Date.now();
-    const stored = localStorage.getItem(welcomeKey);
-    let showModal = false;
+    const welcomeKey = 'profileModalWelcome'
+    const now = Date.now()
+    const stored = localStorage.getItem(welcomeKey)
+    let showModal = false
     if (stored) {
       try {
-        const data = JSON.parse(stored);
+        const data = JSON.parse(stored)
         if (!data.expire || now > data.expire) {
-          showModal = true;
+          showModal = true
         }
       } catch {
-        showModal = true;
+        showModal = true
       }
     } else {
-      showModal = true;
+      showModal = true
     }
     if (showModal) {
-      this.showProfileModal = true;
-      localStorage.setItem(welcomeKey, JSON.stringify({ expire: now + 3 * 24 * 60 * 60 * 1000 }));
+      this.showProfileModal = true
+      localStorage.setItem(welcomeKey, JSON.stringify({ expire: now + 3 * 24 * 60 * 60 * 1000 }))
     }
 
-    window.addEventListener("keydown", (e) => {
-      if (e.code === "Space") {
-        e.preventDefault();
-        this.generatePalette();
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault()
+        this.generatePalette()
       }
-    });
+    })
   },
-};
+}
 </script>
 
-<style scoped>
-/* Les styles ont été déplacés dans src/assets/main.css */
-</style>
+<style scoped></style>

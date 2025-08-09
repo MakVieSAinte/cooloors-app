@@ -27,22 +27,20 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
-import profilePic from "@/assets/profil.jpg";
-import hello from "@/assets/hello.gif";
+import { defineProps } from 'vue'
+import profilePic from '@/assets/profil.jpg'
+import hello from '@/assets/hello.gif'
 const props = defineProps({
   visible: Boolean,
   profileName: {
     type: String,
-    default: "MakVieSAinte",
+    default: 'MakVieSAinte',
   },
   profileImg: {
     type: String,
-    default: "/profil.jpg",
+    default: '/profil.jpg',
   },
-});
+})
 </script>
 
-<style scoped>
-/* Les styles ont été déplacés dans src/assets/main.css */
-</style>
+<style scoped></style>
