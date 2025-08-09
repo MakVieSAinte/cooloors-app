@@ -5,7 +5,7 @@ export const useColorStore = defineStore('color', {
   state: () => ({
     colors: [] as Color[],
     history: [] as ColorHistory[],
-    currentIndex: -1,
+    currentIndex: -1,   
     minColors: 3, // Minimum de 4 couleurs
     maxColors: 6, // Maximum de 6 couleurs
     initialColumnCount: 4, // Nombre de colonnes à l'init
