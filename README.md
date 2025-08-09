@@ -1,4 +1,4 @@
-# 🎨 Kolor App (cooloors-app)
+# 🎨 Kolor App 
 
 ![Vue 3](https://img.shields.io/badge/Vue-3.x-brightgreen.svg)
 ![Vite](https://img.shields.io/badge/Vite-4.x-blueviolet.svg)
