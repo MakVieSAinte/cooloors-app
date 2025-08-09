@@ -17,28 +17,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.add-column-btn {
-  position: absolute;
-  top: 50%;
-  right: -12px;
-  transform: translateY(-50%);
-  width: 26px;
-  height: 26px;
-  font-size: 12px;
-  border-radius: 50%;
-  background: white;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 18px;
-  opacity: 0;
-  transition: all 0.3s ease;
-  z-index: 10;
-}
-
-.add-column-btn:hover {
-  transform: translateY(-50%) scale(1.1);
-}
+/* Les styles ont été déplacés dans src/assets/main.css */
 </style>

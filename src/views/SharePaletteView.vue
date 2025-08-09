@@ -38,15 +38,5 @@ const colors = computed(() => {
 </script>
 
 <style scoped>
-.share-palette-view {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 48px;
-}
-.palette-preview {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
-}
+/* Les styles ont été déplacés dans src/assets/main.css */
 </style>
