@@ -1,4 +1,4 @@
-# 🎨 Kolor App (cooloors-app)
+# 🎨 Kolor App 
 
 ![Vue 3](https://img.shields.io/badge/Vue-3.x-brightgreen.svg)
 ![Vite](https://img.shields.io/badge/Vite-4.x-blueviolet.svg)
@@ -7,15 +7,6 @@
 ![Supabase](https://img.shields.io/badge/Supabase-Cloud-green.svg)
 
 > Générateur et gestionnaire de palettes de couleurs moderne, inspiré de Coolors, développé avec Vue 3, Vite et TypeScript. Optimisé mobile, PWA-ready, et connecté à Supabase pour la sauvegarde cloud.
-
----
-
-## ✨ Aperçu
-
-![Aperçu Kolor App - Desktop](./public/preview-desktop.png)
-![Aperçu Kolor App - Mobile](./public/preview-mobile.png)
-
-_(Ajoute tes captures d'écran dans `public/` pour un rendu optimal)_
 
 ---
 
@@ -95,18 +86,6 @@ Place une icône source `public/icon.png` (512x512px), puis :
 ```sh
 npm run generate-pwa-icons
 ```
-
----
-
-## 🔒 Variables d'environnement
-
-Crée un fichier `.env` à la racine avec :
-
-```
-VITE_SUPABASE_URL=...
-VITE_SUPABASE_ANON_KEY=...
-```
-
 ---
 
 ## 📱 PWA & Installation
