@@ -416,13 +416,13 @@ export default defineComponent({
           doc.addImage(img, 'PNG', pdfW - 180, pdfH - 70, 120, 40)
           doc.setFontSize(18)
           doc.setTextColor('#0073ff')
-          doc.text('Made with Coolors.co', pdfW - 180, pdfH - 18)
+          doc.text('Made with Kolor by MakVieSAinte', pdfW - 180, pdfH - 18)
           doc.save((palette.name || 'palette') + '.pdf')
         }
         img.onerror = function () {
           doc.setFontSize(18)
           doc.setTextColor('#0073ff')
-          doc.text('Made with Coolors.co', pdfW - 180, pdfH - 18)
+          doc.text('Made with Kolor by MakVieSAinte', pdfW - 180, pdfH - 18)
           doc.save((palette.name || 'palette') + '.pdf')
         }
         img.src = logoUrl
@@ -449,13 +449,13 @@ export default defineComponent({
         doc.addImage(img, 'PNG', pdfW - 180, pdfH - 70, 120, 40)
         doc.setFontSize(18)
         doc.setTextColor('#0073ff')
-        doc.text('Made with Coolors.co', pdfW - 180, pdfH - 18)
+        doc.text('Made with Kolor by MakVieSAinte', pdfW - 180, pdfH - 18)
         doc.save((palette.name || 'palette') + '.pdf')
       }
       img.onerror = function () {
         doc.setFontSize(18)
         doc.setTextColor('#0073ff')
-        doc.text('Made with Coolors.co', pdfW - 180, pdfH - 18)
+        doc.text('Made with Kolor by MakVieSAinte', pdfW - 180, pdfH - 18)
         doc.save((palette.name || 'palette') + '.pdf')
       }
       img.src = logoUrl
