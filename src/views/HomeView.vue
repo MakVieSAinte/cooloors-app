@@ -1,11 +1,6 @@
 <template>
   <div>
-    <ProfileModal
-      :visible="showProfileModal"
-      profileName="VieSAinte Mak"
-      profileImg="/profile.jpg"
-      @close="showProfileModal = false"
-    />
+  <ProfileModal :visible="showProfileModal" @close="showProfileModal = false" />
     <main>
       <div class="colors-container">
         <div v-for="(color, index) in colors" :key="color.id" class="color-column">
@@ -19,7 +14,7 @@
             @add="addColorColumn(index)"
           />
           <AddColumnButton
-            v-if="index < colors.length - 1"
+            v-if="index < colors.length - 1 && !showProfileModal"
             @add="addColorColumn(index)"
             class="add-btn"
           />
@@ -27,7 +22,7 @@
 
         <!-- Bouton pour ouvrir le modal profil (exemple en haut à droite) -->
         <button class="open-profile-btn" @click="showProfileModal = true">
-          <img src="@/assets/profil.jpg" alt="" /> MakVieSAinte
+          <img :src="profilImg" alt="" /> MakVieSAinte
         </button>
       </div>
 
@@ -109,7 +104,8 @@ import { useColorStore } from '@/stores/colorStore'
 import ColorBox from '@/components/ColorBox.vue'
 import AddColumnButton from '@/components/AddColumnButton.vue'
 import ProfileModal from '@/components/ProfileModal.vue'
-import { Toaster, toast } from 'vue-sonner'
+import { toast } from 'vue-sonner'
+import profilImg from '@/assets/profil.jpg'
 
 export default {
   name: 'HomeView',
@@ -143,6 +139,16 @@ export default {
     canRedo() {
       return this.store.currentIndex < this.store.history.length - 1
     },
+  },
+
+  watch: {
+    showProfileModal(val: boolean) {
+      document.documentElement.classList.toggle('modal-open', !!val)
+    },
+  },
+
+  unmounted() {
+    document.documentElement.classList.remove('modal-open')
   },
 
   methods: {

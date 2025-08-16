@@ -1,6 +1,6 @@
 <template>
   <div v-if="showPalettesModal" class="modal-overlay" @click.self="closePalettesModal">
-    <div class="modal-content" style="position: relative">
+    <div class="modal-content palettes-modal" style="position: relative">
       <button
         class="nav-button"
         @click="closePalettesModal"
@@ -27,11 +27,11 @@
         </svg>
       </button>
       <h2>Mes palettes sauvegardées</h2>
-      <br />
-      <br />
-      <div v-if="loadingPalettes">Chargement...</div>
-      <div v-else-if="palettes.length === 0">Aucune palette sauvegardée.</div>
-      <ul v-else style="list-style: none; padding: 0; max-height: 50vh; overflow: auto">
+      <br>
+      <div class="palettes-list">
+        <div v-if="loadingPalettes">Chargement...</div>
+        <div v-else-if="palettes.length === 0">Aucune palette sauvegardée.</div>
+        <ul v-else class="palettes-ul">
         <li v-for="palette in palettes" :key="palette.id" style="margin-bottom: 18px">
           <div style="display: flex; align-items: center; gap: 8px">
             <div style="display: flex; gap: 2px">
@@ -43,7 +43,7 @@
                   width: '32px',
                   height: '32px',
                   borderRadius: '4px',
-                  border: '1px solid #ccc',
+                  border: '1px solid var(--swatch-border)',
                 }"
               ></div>
             </div>
@@ -158,17 +158,25 @@
               </div>
             </div>
           </div>
-          <div style="font-size: 0.8em; opacity: 0.6">
-            {{ new Date(palette.created_at).toLocaleString() }}
+          <div style="font-size: 0.8em; opacity: 0.6; margin-top: 5px">
+            {{ formatFrenchDateTime(palette.created_at) }}
           </div>
         </li>
-      </ul>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, type PropType } from 'vue'
+type SavedPalette = {
+  id: string
+  name?: string
+  colors: string[]
+  created_at?: string
+  showActions?: boolean
+}
 
 export default defineComponent({
   name: 'PalettesModal',
@@ -178,7 +186,7 @@ export default defineComponent({
       required: true,
     },
     palettes: {
-      type: Array,
+      type: Array as PropType<SavedPalette[]>,
       required: true,
     },
     loadingPalettes: {
@@ -201,11 +209,12 @@ export default defineComponent({
         // Stocker l'état pour éviter des appels multiples
         el.__vueClickOutside__ = {
           handler: binding.value,
-          handleEvent: (event) => {
+          handleEvent: (event: MouseEvent) => {
             // Ne réagit pas aux clics sur le menu lui-même
-            if (!(el === event.target || el.contains(event.target))) {
+            const target = event.target as HTMLElement | null
+            if (!(el === target || (target && el.contains(target)))) {
               // Ne déclenche pas l'événement si le clic vient du bouton qui ouvre le menu
-              const openButton = event.target.closest('.nav-button')
+              const openButton = target?.closest?.('.nav-button') as HTMLElement | null
               if (
                 !openButton ||
                 !openButton.hasAttribute('title') ||
@@ -232,25 +241,40 @@ export default defineComponent({
     },
   },
   methods: {
+    formatFrenchDateTime(dateStr?: string) {
+      if (!dateStr) return ''
+      const d = new Date(dateStr)
+      if (isNaN(d.getTime())) return ''
+      // Exemple souhaité: 26 juin 2024 10h:44
+      // Utiliser Intl.DateTimeFormat pour français, puis injecter le "h:" pour l'heure
+      const datePart = new Intl.DateTimeFormat('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }).format(d)
+      const hours = d.getHours().toString().padStart(2, '0')
+      const minutes = d.getMinutes().toString().padStart(2, '0')
+      return `${datePart} ${hours}h:${minutes}`
+    },
     closePalettesModal() {
       this.$emit('close')
     },
-    togglePaletteActions(palette) {
+  togglePaletteActions(palette: SavedPalette) {
       this.$emit('toggle-actions', palette)
     },
-    closePaletteActions(palette) {
+  closePaletteActions(palette: SavedPalette) {
       this.$emit('close-actions', palette)
     },
-    loadPalette(palette) {
+  loadPalette(palette: SavedPalette) {
       this.$emit('load-palette', palette)
     },
-    printPalette(palette) {
+  printPalette(palette: SavedPalette) {
       this.$emit('print-palette', palette)
     },
-    sharePalette(palette) {
+  sharePalette(palette: SavedPalette) {
       this.$emit('share-palette', palette)
     },
-    deletePalette(palette) {
+  deletePalette(palette: SavedPalette) {
       this.$emit('delete-palette', palette)
     },
   },

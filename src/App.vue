@@ -91,19 +91,33 @@ export default defineComponent({
       mobileMenuOpen: false,
     }
   },
+  watch: {
+    showPalettesModal: 'updateOverlayClass',
+    showModalProfil: 'updateOverlayClass',
+    showDeletePaletteModal: 'updateOverlayClass',
+    showWelcomeModal: 'updateOverlayClass',
+    mobileMenuOpen: 'updateOverlayClass',
+  },
   async created() {
     // Restaure le thème depuis localStorage, sinon light par défaut
     const savedTheme = localStorage.getItem('theme')
-    if (savedTheme === 'dark') {
+  if (savedTheme === 'dark') {
       this.isDarkMode = true
-    } else {
-      // Par défaut : light
+    } else if (savedTheme === 'light') {
       this.isDarkMode = false
+    } else {
+      // Si aucune préférence sauvegardée, utiliser la préférence système
+      this.isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
     }
+  // Propager sur <html> pour CSS global et UA
+  document.documentElement.classList.toggle('dark', this.isDarkMode)
+  document.documentElement.style.colorScheme = this.isDarkMode ? 'dark' : 'light'
     // Écouter les changements de préférence système
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
       if (!localStorage.getItem('theme')) {
         this.isDarkMode = e.matches
+  document.documentElement.classList.toggle('dark', this.isDarkMode)
+  document.documentElement.style.colorScheme = this.isDarkMode ? 'dark' : 'light'
       }
     })
     // Modal de bienvenue (une seule fois)
@@ -130,6 +144,28 @@ export default defineComponent({
     },
   },
   methods: {
+    // Génère un nom de palette générique du style "XDT787536" (alphanumérique)
+    // length par défaut: 9, et plafonné à 15 caractères
+    generatePaletteName(length: number = 15): string {
+      // Style par défaut: 3 lettres + chiffres (ex: XDT787536)
+      const maxLen = Math.min(Math.max(4, length), 15)
+      const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ' // éviter I et O pour lisibilité
+      const digits = '0123456789'
+      const pick = (pool: string) => pool[Math.floor(Math.random() * pool.length)]
+      let name = ''
+      for (let i = 0; i < 3 && i < maxLen; i++) name += pick(letters)
+      for (let i = name.length; i < maxLen; i++) name += pick(digits)
+      return name
+    },
+    updateOverlayClass() {
+      const anyOpen =
+        this.showPalettesModal ||
+        this.showModalProfil ||
+        this.showDeletePaletteModal ||
+        this.showWelcomeModal ||
+        this.mobileMenuOpen
+      document.documentElement.classList.toggle('modal-open', !!anyOpen)
+    },
     // Navigation et actions utilisateur
     handleUndo() {
       this.store.undo()
@@ -140,6 +176,8 @@ export default defineComponent({
     toggleTheme() {
       this.isDarkMode = !this.isDarkMode
       localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light')
+  document.documentElement.classList.toggle('dark', this.isDarkMode)
+  document.documentElement.style.colorScheme = this.isDarkMode ? 'dark' : 'light'
     },
     async loginFigma() {
       await supabase.auth.signInWithOAuth({ provider: 'figma' })
@@ -195,16 +233,18 @@ export default defineComponent({
         return
       }
       let error = null
-      try {
+  try {
         const res = await supabase.from('palettes').insert([
           {
             user_id: this.user.id,
             colors: colors,
-            name: 'Palette du ' + new Date().toLocaleString(),
+    // Nom générique de type alphanumérique (ex: XDT787536), <= 15 caractères
+    name: this.generatePaletteName(9),
           },
         ])
         error = res.error
       } catch (e) {
+        console.error(e)
         toast.error('Erreur réseau. Vérifiez votre connexion.', {
           richColors: true,
         })
@@ -287,6 +327,7 @@ export default defineComponent({
         data = res.data
         error = res.error
       } catch (e) {
+        console.error(e)
         this.loadingPalettes = false
         toast.error('Impossible de charger les palettes.', {
           richColors: true,
@@ -333,6 +374,7 @@ export default defineComponent({
         const res = await supabase.from('palettes').delete().eq('id', this.paletteToDelete.id)
         error = res.error
       } catch (e) {
+        console.error(e)
         toast.error('Impossible de supprimer la palette.', {
           richColors: true,
         })

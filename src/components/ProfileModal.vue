@@ -32,20 +32,17 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
-import profilePic from '@/assets/profil.jpg'
+import { defineProps, computed } from 'vue'
+import profilePicDefault from '@/assets/profil.jpg'
 import hello from '@/assets/hello.gif'
-const props = defineProps({
-  visible: Boolean,
-  profileName: {
-    type: String,
-    default: 'MakVieSAinte',
-  },
-  profileImg: {
-    type: String,
-    default: '/profil.jpg',
-  },
-})
+
+const props = defineProps<{
+  visible: boolean
+  profileName?: string
+  profileImg?: string
+}>()
+
+const profilePic = computed(() => props.profileImg || profilePicDefault)
 </script>
 
 <style scoped>

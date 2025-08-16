@@ -10,7 +10,7 @@
           width: '60px',
           height: '60px',
           borderRadius: '8px',
-          border: '1px solid #ccc',
+          border: '1px solid var(--swatch-border)',
           marginRight: '8px',
         }"
       ></div>

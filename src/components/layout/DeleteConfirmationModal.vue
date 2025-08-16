@@ -5,11 +5,7 @@
       <p>Voulez-vous vraiment supprimer cette palette ? Cette action est irréversible.</p>
       <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px">
         <button class="nav-button" @click="cancel">Annuler</button>
-        <button
-          class="nav-button primary"
-          style="background: #e74c3c; color: #fff"
-          @click="confirm"
-        >
+  <button class="nav-button primary danger" @click="confirm">
           Supprimer
         </button>
       </div>
@@ -39,3 +35,13 @@ export default defineComponent({
   },
 })
 </script>
+
+<style scoped>
+.nav-button.primary.danger {
+  background: var(--accent-color, #e74c3c);
+  color: #fff;
+}
+.nav-button.primary.danger:hover {
+  filter: brightness(0.9);
+}
+</style>
