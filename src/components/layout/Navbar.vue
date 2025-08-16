@@ -136,14 +136,33 @@
       </span>
     </div>
 
-    <!-- Hamburger mobile -->
+    <!-- Mobile: afficher le profil à la place du hamburger si l'utilisateur est connecté -->
     <button
+      v-if="user"
       class="nav-button nav-hamburger"
-      @click="toggleMobileMenu"
-      aria-label="Menu"
-      title="Menu"
+      @click="showModalProfil"
+      aria-label="Profil"
+      title="Profil"
+      style="background: none; border: none; box-shadow: none"
     >
-      <AlignJustify class="icon" />
+      <span class="profil">
+        <span class="initials">{{ user.email.charAt(0).toUpperCase() }}</span>
+      </span>
+    </button>
+    <button
+      v-else
+      class="nav-button nav-hamburger"
+      @click="loginFigma"
+      aria-label="Connexion Figma"
+      title="Connexion Figma"
+      style="gap: 6px"
+    >
+      <img
+        src="https://static.figma.com/app/icon/1/favicon.png"
+        alt="Figma"
+        style="width: 1.2em; height: 1.2em; vertical-align: middle"
+      />
+      <span class="nav-text">Connexion</span>
     </button>
     <transition name="fade">
       <div v-if="mobileMenuOpen" class="mobile-menu-overlay" @click.self="closeMobileMenu">
@@ -190,7 +209,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { ChevronLeft, ChevronRight, Heart, Sun, Moon, AlignJustify, X } from 'lucide-vue-next'
+import { ChevronLeft, ChevronRight, Heart, Sun, Moon, X } from 'lucide-vue-next'
 
 export default defineComponent({
   name: 'NavbarComponent',
@@ -200,7 +219,6 @@ export default defineComponent({
     Heart,
     Sun,
     Moon,
-    AlignJustify,
     X,
   },
   props: {

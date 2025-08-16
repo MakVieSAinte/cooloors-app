@@ -1,6 +1,6 @@
 <template>
   <div class="app" :class="{ dark: isDarkMode }">
-    <Toaster position="bottom-center" :expand="false" :theme="isDarkMode ? 'dark' : 'light'" />
+  <Toaster :position="toasterPosition" :expand="false" :theme="isDarkMode ? 'dark' : 'light'" />
 
     <Navbar
       :canUndo="canUndo"
@@ -89,6 +89,11 @@ export default defineComponent({
       palettes: [],
       loadingPalettes: false,
       mobileMenuOpen: false,
+  openPalettesHandler: null as ((e: Event) => void) | null,
+  savePaletteHandler: null as ((e: Event) => void) | null,
+  toasterPosition: 'bottom-center' as 'top-center' | 'bottom-center',
+  toasterMedia: null as MediaQueryList | null,
+  toasterMediaChangeHandler: null as ((e: MediaQueryListEvent) => void) | null,
     }
   },
   watch: {
@@ -134,6 +139,36 @@ export default defineComponent({
     supabase.auth.onAuthStateChange((event, session) => {
       this.user = session?.user || null
     })
+
+    // Écoute un événement global pour ouvrir la modale des palettes depuis d'autres vues
+    this.openPalettesHandler = () => this.fetchPalettes()
+    window.addEventListener('open-palettes-modal', this.openPalettesHandler)
+    this.savePaletteHandler = () => this.savePalette()
+    window.addEventListener('save-current-palette', this.savePaletteHandler)
+
+    // Position responsive des toasts: top-center en mobile
+    this.toasterMedia = window.matchMedia('(max-width: 768px)')
+    const setToastPos = (matches: boolean) => {
+      this.toasterPosition = matches ? 'top-center' : 'bottom-center'
+    }
+    setToastPos(this.toasterMedia.matches)
+    this.toasterMediaChangeHandler = (e: MediaQueryListEvent) => setToastPos(e.matches)
+    this.toasterMedia.addEventListener('change', this.toasterMediaChangeHandler)
+  },
+  beforeUnmount() {
+    if (this.openPalettesHandler) {
+      window.removeEventListener('open-palettes-modal', this.openPalettesHandler)
+      this.openPalettesHandler = null
+    }
+    if (this.savePaletteHandler) {
+      window.removeEventListener('save-current-palette', this.savePaletteHandler)
+      this.savePaletteHandler = null
+    }
+    if (this.toasterMedia && this.toasterMediaChangeHandler) {
+      this.toasterMedia.removeEventListener('change', this.toasterMediaChangeHandler)
+      this.toasterMediaChangeHandler = null
+      this.toasterMedia = null
+    }
   },
   computed: {
     canUndo(): boolean {
