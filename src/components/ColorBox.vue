@@ -45,6 +45,7 @@
         @click="copyToClipboard"
         :style="{ color: getContrastText(color.hex) }"
       >
+      
         {{ color.hex.toUpperCase() }}
       </div>
 
