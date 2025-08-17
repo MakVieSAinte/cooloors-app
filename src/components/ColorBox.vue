@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, type PropType } from 'vue'
 import type { Color } from '../types/types'
 import { Lock, Unlock, Clipboard, Check, X, Copy, Plus } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
@@ -106,7 +106,7 @@ export default {
       required: true,
     },
   },
-  emits: ['toggle-lock', 'remove'],
+  emits: ['toggle-lock', 'remove', 'add'],
 
   data() {
     return {
@@ -158,6 +158,12 @@ export default {
     removeColumn() {
       this.$emit('remove')
       toast.error('Colonne supprimée', {
+        richColors: true,
+      })
+    },
+    addColumn() {
+      this.$emit('add')
+      toast.success('Colonne ajoutée', {
         richColors: true,
       })
     },

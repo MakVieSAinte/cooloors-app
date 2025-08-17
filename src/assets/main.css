@@ -515,7 +515,7 @@ body,
   font-size: 18px;
   opacity: 0;
   transition: all 0.3s ease;
-  z-index: 10;
+  z-index: 50;
  }
 
 .add-column-btn .icon {
@@ -862,7 +862,7 @@ html.modal-open .add-btn { display: none !important; }
     gap: 15px;
     align-items: center;
     transition: all .33s ease-in-out;
-    opacity: 0;
+  opacity: 0; /* Caché par défaut, visible au survol */
   }
 
   .mobile-action-btn {
@@ -1012,6 +1012,11 @@ html.modal-open .add-btn { display: none !important; }
 }
 
 .color-column:hover .add-btn {
+  opacity: 1;
+}
+
+/* Rendez visible le bouton d'ajout même si la classe de composant change */
+.color-column:hover .add-column-btn {
   opacity: 1;
 }
 
