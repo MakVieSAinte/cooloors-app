@@ -104,25 +104,30 @@ export default defineComponent({
     mobileMenuOpen: 'updateOverlayClass',
   },
   async created() {
-    // Restaure le thème depuis localStorage, sinon light par défaut
+    // Restaure le thème depuis localStorage; par défaut: light
     const savedTheme = localStorage.getItem('theme')
-  if (savedTheme === 'dark') {
+    if (savedTheme === 'dark') {
       this.isDarkMode = true
-    } else if (savedTheme === 'light') {
+    } else if (savedTheme === 'light' || savedTheme === null) {
+      // Par défaut (aucune préférence): light
       this.isDarkMode = false
+      if (savedTheme === null) {
+        localStorage.setItem('theme', 'light')
+      }
     } else {
-      // Si aucune préférence sauvegardée, utiliser la préférence système
+      // Valeur spéciale éventuelle (ex: 'system') — fallback sur la préférence système
       this.isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
     }
-  // Propager sur <html> pour CSS global et UA
+    // Propager sur <html> pour CSS global et UA
   document.documentElement.classList.toggle('dark', this.isDarkMode)
   document.documentElement.style.colorScheme = this.isDarkMode ? 'dark' : 'light'
-    // Écouter les changements de préférence système
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      if (!localStorage.getItem('theme')) {
+    // Écouter les changements de préférence système uniquement si l'utilisateur a choisi 'system'
+    const prefersDarkMql = window.matchMedia('(prefers-color-scheme: dark)')
+    prefersDarkMql.addEventListener('change', (e) => {
+      if (localStorage.getItem('theme') === 'system') {
         this.isDarkMode = e.matches
-  document.documentElement.classList.toggle('dark', this.isDarkMode)
-  document.documentElement.style.colorScheme = this.isDarkMode ? 'dark' : 'light'
+        document.documentElement.classList.toggle('dark', this.isDarkMode)
+        document.documentElement.style.colorScheme = this.isDarkMode ? 'dark' : 'light'
       }
     })
     // Modal de bienvenue (une seule fois)
@@ -285,7 +290,7 @@ export default defineComponent({
         })
         return
       }
-      if (error) {
+  if (error) {
         if (error.code === '42501' || error.code === 'permission_denied') {
           toast.error('Accès refusé', {
             richColors: true,
@@ -429,7 +434,7 @@ export default defineComponent({
       this.cancelDeletePalette()
     },
     printPalette(palette) {
-      // Génération PDF avec jsPDF, style grille 2x3 (5 couleurs, 1 case vide), cartes maximisées
+  // Génération PDF avec jsPDF, style grille 2x3 (5 couleurs, 1 case vide), cartes maximisées
       const pdfW = 1091
       const pdfH = 768
       const doc = new jsPDF({
@@ -437,73 +442,60 @@ export default defineComponent({
         unit: 'px',
         format: [pdfW, pdfH],
       })
-
-      // Intégration police Karla (nécessite le fichier Karla-Regular.ttf dans public/)
-      fetch('/Karla-Regular.ttf')
-        .then((res) => res.arrayBuffer())
-        .then((fontBuffer) => {
-          // Convertir ArrayBuffer en base64
-          const uint8 = new Uint8Array(fontBuffer)
-          let binary = ''
-          for (let i = 0; i < uint8.length; i++) binary += String.fromCharCode(uint8[i])
-          const base64 = btoa(binary)
-          doc.addFileToVFS('Karla-Regular.ttf', base64)
-          doc.addFont('Karla-Regular.ttf', 'Karla', 'normal')
-          doc.setFont('Karla')
-          renderPalettePDF()
-        })
-        .catch(() => {
-          // Si échec, fallback police par défaut
-          renderPalettePDF()
-        })
+  // Utiliser une police intégrée pour éviter tout chargement asynchrone
+  doc.setFont('helvetica', 'normal')
 
       const renderPalettePDF = () => {
         // Marges minimales
-        const marginX = 24
-        const marginY = 24
-        const gap = 24
-        // Calcul dynamique pour occuper presque tout l'espace
-        const cellW = Math.floor((pdfW - marginX * 2 - gap * 2) / 3)
-        const cellH = Math.floor((pdfH - marginY * 2 - gap) / 2)
+  const marginX = 24
+  const marginY = 24
+  const gap = 16 // gap réduit pour gagner un peu de place visuelle
+  // Calcul dynamique pour occuper presque tout l'espace
+  const cellW = Math.floor((pdfW - marginX * 2 - gap * 2) / 3)
+  // Réserver de l'espace en bas pour le texte du footer (augmentation pour un meilleur dégagement)
+  const footerReserve = 56
+  const cellH = Math.floor((pdfH - marginY * 2 - gap - footerReserve) / 2)
         const startX = marginX
         const startY = marginY
 
-        for (let i = 0; i < 5; i++) {
+        // 6 cases: 2 lignes x 3 colonnes
+        for (let i = 0; i < 6; i++) {
           const row = Math.floor(i / 3)
           const col = i % 3
           const x = startX + col * (cellW + gap)
           const y = startY + row * (cellH + gap)
           const color = palette.colors[i]
-          if (!color) continue
-          doc.setFillColor(color)
-          doc.roundedRect(x, y, cellW, cellH, 28, 28, 'F')
-          // Code hex en bas à gauche
-          doc.setFontSize(28)
-          // Détermine la couleur du texte selon la couleur de fond
-          const hexTextColor = getContrastText(color)
-          doc.setTextColor(hexTextColor)
-          doc.text(color.replace('#', '').toUpperCase(), x + 22, y + cellH - 22)
+          if (color) {
+            // Case remplie
+            doc.setFillColor(color)
+            doc.roundedRect(x, y, cellW, cellH, 28, 28, 'F')
+            // Code hex en bas à gauche
+            doc.setFontSize(28)
+            const hexTextColor = getContrastText(color)
+            doc.setTextColor(hexTextColor)
+            doc.text(color.replace('#', '').toUpperCase(), x + 22, y + cellH - 22)
+          } else {
+            // Case vide: contour gris
+            doc.setDrawColor('#CCCCCC')
+            doc.setLineWidth(1)
+            doc.roundedRect(x, y, cellW, cellH, 28, 28, 'S')
+          }
         }
 
-        // Logo Coolors en bas à droite
-        const logoUrl = 'https://upload.wikimedia.org/wikipedia/commons/6/6a/Coolors_logo.svg'
-        const img = new window.Image()
-        img.crossOrigin = 'Anonymous'
-        img.onload = function () {
-          doc.addImage(img, 'PNG', pdfW - 180, pdfH - 70, 120, 40)
-          doc.setFontSize(18)
-          doc.setTextColor('#0073ff')
-          doc.text('Made with Kolor by MakVieSAinte', pdfW - 180, pdfH - 18)
-          doc.save((palette.name || 'palette') + '.pdf')
-        }
-        img.onerror = function () {
-          doc.setFontSize(18)
-          doc.setTextColor('#0073ff')
-          doc.text('Made with Kolor by MakVieSAinte', pdfW - 180, pdfH - 18)
-          doc.save((palette.name || 'palette') + '.pdf')
-        }
-        img.src = logoUrl
+        // Footer: petit texte centré en bas
+  const footerText = 'make with Kolor'
+  const footerFontSize = 18 // plus lisible
+  const padding = 32 // marge un peu plus large du bord
+  doc.setFontSize(footerFontSize)
+  doc.setTextColor('#111111')
+  // Aligné à droite avec une marge
+  doc.text(footerText, pdfW - padding, pdfH - padding, { align: 'right' })
+
+  // Sauvegarde immédiate (sous geste utilisateur)
+  doc.save((palette.name || 'palette') + '.pdf')
       }
+      // Rendu synchrone
+      renderPalettePDF()
       // Fonction utilitaire pour déterminer la couleur du texte (noir/blanc) selon le fond
       function getContrastText(hex) {
         // Enlève le # si présent
@@ -517,25 +509,6 @@ export default defineComponent({
         // Retourne noir si fond clair, blanc si fond foncé
         return luminance > 0.6 ? '#222' : '#fff'
       }
-
-      // Logo Coolors en bas à droite
-      const logoUrl = 'https://upload.wikimedia.org/wikipedia/commons/6/6a/Coolors_logo.svg'
-      const img = new window.Image()
-      img.crossOrigin = 'Anonymous'
-      img.onload = function () {
-        doc.addImage(img, 'PNG', pdfW - 180, pdfH - 70, 120, 40)
-        doc.setFontSize(18)
-        doc.setTextColor('#0073ff')
-        doc.text('Made with Kolor by MakVieSAinte', pdfW - 180, pdfH - 18)
-        doc.save((palette.name || 'palette') + '.pdf')
-      }
-      img.onerror = function () {
-        doc.setFontSize(18)
-        doc.setTextColor('#0073ff')
-        doc.text('Made with Kolor by MakVieSAinte', pdfW - 180, pdfH - 18)
-        doc.save((palette.name || 'palette') + '.pdf')
-      }
-      img.src = logoUrl
     },
     sharePalette(palette) {
       // Génère un lien de partage avec les couleurs encodées dans l'URL
@@ -545,6 +518,7 @@ export default defineComponent({
       toast.success('Lien de partage copié !', {
         richColors: true,
       })
+
     },
   },
 })

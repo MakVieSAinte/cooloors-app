@@ -72,7 +72,7 @@
 <script lang="ts">
 import { ref, computed } from 'vue'
 import type { Color } from '../types/types'
-import { Lock, Unlock, Clipboard, Check, X, Copy } from 'lucide-vue-next'
+import { Lock, Unlock, Clipboard, Check, X, Copy, Plus } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import { getColorName } from '../utils/colorName'
 
@@ -85,6 +85,7 @@ export default {
     Check,
     X,
     Copy,
+    Plus
   },
 
   props: {

@@ -191,7 +191,13 @@ export default {
   },
 
   mounted() {
-    this.generatePalette()
+    // Ne génère pas si des couleurs existent déjà (ex: import depuis la page de partage)
+    if (!this.store.colors || this.store.colors.length === 0) {
+      this.generatePalette()
+    } else {
+      // S'assure que la variable CSS est à jour pour le layout
+      document.documentElement.style.setProperty('--color-count', String(this.store.colors.length))
+    }
 
     // Gestion du modal de bienvenue (localStorage, expiration 3 jours)
     const welcomeKey = 'profileModalWelcome'

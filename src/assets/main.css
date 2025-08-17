@@ -137,7 +137,7 @@ body,
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 0px;
+  gap: 6px;
 }
 
 .logo {
@@ -516,6 +516,13 @@ body,
   opacity: 0;
   transition: all 0.3s ease;
   z-index: 10;
+ }
+
+.add-column-btn .icon {
+  color: #111;
+}
+.dark .add-column-btn .icon {
+  color: #fff;
 }
 
 .add-column-btn:hover {
@@ -842,14 +849,20 @@ html.modal-open .add-btn { display: none !important; }
     justify-content: space-between;
     width: 100%;
     padding: 0 20px;
+    height: 100%;
     min-height: 80px;
   }
 
+  .mobile-layout:hover .mobile-actions {
+    opacity: 1;
+  }
   /* Actions à gauche */
   .mobile-actions {
     display: flex;
     gap: 15px;
     align-items: center;
+    transition: all .33s ease-in-out;
+    opacity: 0;
   }
 
   .mobile-action-btn {

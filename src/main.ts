@@ -6,6 +6,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import './registerServiceWorker'
+import { injectSpeedInsights } from '@vercel/speed-insights'
 
 const app = createApp(App)
 
@@ -13,3 +14,6 @@ app.use(createPinia())
 app.use(router)
 
 app.mount('#app')
+
+// Activer Speed Insights dans tous les environnements (dev/preview/prod)
+injectSpeedInsights()
