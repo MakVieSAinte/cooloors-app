@@ -45,11 +45,12 @@
         @click="copyToClipboard"
         :style="{ color: getContrastText(color.hex) }"
       >
-      
+
         {{ color.hex.toUpperCase() }}
       </div>
 
       <!-- Actions à droite -->
+       
       <div class="mobile-actions">
         <button @click="toggleLock" class="mobile-action-btn" :class="color.locked ? 'locked' : ''">
           <Lock v-if="color.locked" class="icon" />
